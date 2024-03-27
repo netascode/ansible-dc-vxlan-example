@@ -1,0 +1,20 @@
+---
+
+all:
+  children:
+    # This is a group of ndfc controllers.  Each controller below
+    # manages a different fabric.
+    #
+    # In the case of direct to device (DTD) this ndfc group would
+    # not be used and instead the fabric would be directly referenced
+    # in the main.yml playbook entry point.
+    #
+    # ** Note: Only uncomment one of the entries below.  For example,
+    # if you are working with netascode_fabric3 then comment out
+    # netascode_fabric1 and netascode_fabric2.
+    ndfc:
+      children:
+        ndfc1:
+            hosts:
+              ndfc1:
+                ansible_host: 10.15.0.11
