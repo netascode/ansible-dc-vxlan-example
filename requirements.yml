@@ -1,5 +1,9 @@
 # requirements.yml
 collections:
+  - name: community.general
+    version: 8.5.0
+  - name: ansible.posix
+    version: 1.5.4
   - name: ansible.utils
     version: 2.11.0
   - name: ansible.netcommon
@@ -9,6 +13,6 @@ collections:
   - name: https://github.com/CiscoDevNet/ansible-dcnm.git
     type: git
     version: netascode_changes_vpc_fabric
-  # - name: https://github.com/netascode/ansible-dc-vxlan.git
+  # - name: https://github.com/netascode/ansible-dc-vxlan.git   # uncomment this item upon release
   #   type: git
   #   version: develop   # change version later
