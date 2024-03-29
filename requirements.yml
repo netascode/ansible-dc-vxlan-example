@@ -9,6 +9,6 @@ collections:
   - name: https://github.com/CiscoDevNet/ansible-dcnm.git
     type: git
     version: netascode_changes_vpc_fabric
-  - name: https://github.com/netascode/ansible-dc-vxlan.git
-    type: git
-    version: develop   # change version later
+  # - name: https://github.com/netascode/ansible-dc-vxlan.git
+  #   type: git
+  #   version: develop   # change version later
