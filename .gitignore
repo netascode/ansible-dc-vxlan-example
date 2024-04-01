@@ -131,9 +131,4 @@ dmypy.json
 # VSCode
 .vscode/
 
-# Ignore Roles Files Directories
-roles/prepare_model/files
-roles/dtc/common/files
-roles/dtc/create/files
-roles/dtc/deploy/files
-roles/dtc/remove/files
+collections/
