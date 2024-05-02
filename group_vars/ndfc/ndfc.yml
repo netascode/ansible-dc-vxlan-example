@@ -1,5 +1,5 @@
 interface_delete_mode: false
-net_delete_mode: false
+network_delete_mode: false
 vrf_delete_mode: false
 inv_delete_mode: false
 vpc_delete_mode: false
