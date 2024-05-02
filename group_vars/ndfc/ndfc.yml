@@ -1,5 +1,8 @@
+---
+# Parameters for the tasks in the 'Remove' role
 interface_delete_mode: false
 network_delete_mode: false
 vrf_delete_mode: false
 inv_delete_mode: false
 vpc_delete_mode: false
+link_vpc_delete_mode: false
