@@ -9,4 +9,4 @@ ansible_httpapi_validate_certs: false
 ansible_network_os: cisco.dcnm.dcnm
 ansible_username: admin
 ndfc_device_username: admin
-ndfc_device_password: C1sc0@123
+ndfc_device_password: cisco.123
