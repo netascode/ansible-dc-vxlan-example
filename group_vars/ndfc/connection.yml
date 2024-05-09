@@ -7,6 +7,9 @@ ansible_httpapi_port: 443
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_network_os: cisco.dcnm.dcnm
+# Host Credentials
 ansible_username: admin
+ansible_password: cisco.123
+# Credentials for devices in Inevntory
 ndfc_device_username: admin
 ndfc_device_password: cisco.123
