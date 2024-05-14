@@ -12,6 +12,3 @@ collections:
     version: 5.3.0
   - name: cisco.dcnm
     version: 3.5.0
-  # - name: https://github.com/netascode/ansible-dc-vxlan.git   # uncomment this item upon release
-  #   type: git
-  #   version: develop   # change version later
