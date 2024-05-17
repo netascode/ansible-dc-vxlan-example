@@ -1,5 +1,5 @@
 ansible-core==2.16.3
-iac-validate==0.2.5
+iac-validate<=0.2.4
 iac-test==0.2.5
 ansible-lint
 macaddress
