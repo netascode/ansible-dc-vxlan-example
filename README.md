@@ -81,7 +81,11 @@ Verify that the ansible configuration file is being read and all the paths are c
 
 ```bash
 ansible --version
+```
 
+Your output should be similar to the output below
+
+```bash
 ansible [core 2.16.3]
   config file = /Users/username/tmp/nac-vxlan/ansible.cfg
   configured module search path = ['/Users/username/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
@@ -239,7 +243,6 @@ The playbook is located in the root of the repository and is called `vxlan.yml`.
     # -----------------------
     # DataCenter Roles
     #   Role: cisco.netascode_dc_vxlan.dtc manages direct to controller NDFC workflows
-    #   Role: cisco.netascode_dc_vxlan.dtd manages direct to device NXOS workflows
     #
     - role: cisco.nac_dc_vxlan.dtc.create
     - role: cisco.nac_dc_vxlan.dtc.deploy
