@@ -221,7 +221,7 @@ The primary advantage of the workflow is that you can insert these in different 
 
 The playbook for the NDFC as Code collection is the execution point of the this automation collection. In difference to other automation with collections, what is in this playbook is mostly static and not going to change. What is executed during automation is based on changes in the data model. Hence as changes happen in the data model, the playbook will call the modules and based on what has changed in the data model, is what is going to execute.
 
-The playbook is located in the root of the repository and is called `vxlan.yaml`. It contains the following:
+The playbook is located in the root of the repository and is called `vxlan.yml`. It contains the following:
 
 ```yaml
 ---
@@ -280,7 +280,7 @@ vxlan:
 
 ### Topology inventory configuration
 
-This file will be named `topology_switches.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This file will be named `topology_switches.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
 
 ```yaml
 ---
@@ -339,7 +339,7 @@ vxlan:
 
 ### Underlay configuration
 
-This file will be named `underlay.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This file will be named `underlay.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
 
 ```yaml
 ---
@@ -378,7 +378,7 @@ vxlan:
 
 ### VRF configuration
 
-This file will be named `vrfs.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This file will be named `vrfs.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
 
 ```yaml
 ---
@@ -421,7 +421,7 @@ vxlan:
 
 ### Network configuration
 
-This file will be named `networks.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This file will be named `networks.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
 
 ```yaml
 ---
@@ -466,4 +466,12 @@ vxlan:
       - name: leaf2
         switches:
           - { hostname: 10.1.1.14, ports: [] }
+```
+
+## Running the Playbook
+
+Once you have completed the steps above, the playbook can be run using the following command from the root directory of the repository.
+
+```bash
+ansible-playbook -i inventory.yml vxlan.yml
 ```
