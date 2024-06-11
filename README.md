@@ -357,7 +357,6 @@ fabric:
       underlay_subnet_ip_range: 10.1.0.0/16
     ipv6:
       enable_ipv6_link_local_address: false
-      # Ask Shangxin, can't find this property
       underlay_subnet_mask: 64
     ospf:
       area_id: 0.0.0.0
