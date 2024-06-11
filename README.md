@@ -1,6 +1,6 @@
 # Ansible NDFC VXLAN Example Repository
 
-This repository is designed to build the skeleton for the Network as Code DC VXLAN Ansible Galaxy collection. Utilizing this repository will create a working structure that you can build upon to automate your Cisco Nexus Data Center network using NDFC.
+This repository is designed to build the skeleton for the Network as Code DC VXLAN Ansible Galaxy collection. Cloaning this repository will create a working structure that you can build upon to automate your Cisco Nexus Data Center network using NDFC.
 
 ## Setting up environment for the collection
 
@@ -8,7 +8,7 @@ The first procedure for execution of the collection is going to be the installat
 
 ### Step 1 - Installing the example repository
 
-To simplify the usage of the collection we are providing you with an [example repository](https://github.com/netascode/ansible-dc-vxlan-example) that you can clone from github which creates the proper skeleton required, including examples for pipelines. To clone the repository requires the installation of [git client](https://git-scm.com/downloads) that is available for all platforms.
+To simplify the usage of the collection we are providing you with an [example repository](https://github.com/netascode/ansible-dc-vxlan-example) that you can clone from github which creates the proper skeleton required, including examples for pipelines. Cloaning this repository requires the installation of [git client](https://git-scm.com/downloads) that is available for all platforms.
 
 Run the following command in the location of interest.
 
@@ -20,7 +20,7 @@ This will clone the repository into the directory nac-vxlan.
 
 ### Step 2 - Create the virtual environment with pyenv
 
-In this directory you will now create the new virtual environment. For pyenv to work you have to install a version of Python that you want to utilize. At the _time of this writting_, a common version utilized is python version 3.10.13 so to install this with pyenv would be the command `pyenv install 3.10.13`. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
+In this directory you will now create the new virtual environment and install a python version of your choice. At the _time of this writting_, a commonly used version is python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
 
 ```bash
 cd nac-vxlan
@@ -57,7 +57,7 @@ ansible-galaxy collection install -p collections/ansible_collections/ -r require
 
 You will need to then configure your ansible.cfg file to point to the correct location of the collection. 
 
-Which is going to tell you the path for all the python modules and libraries of the virtual environment that was created. If you look in that directory you will find the collections package locations. Here is the base ansible.cfg, you will need to adjust the collection_path to your environment paths:
+This sets the correct path for all the python modules and libraries in the virtual environment that was created. If you look in that directory you will find the collections package locations. Here is the base ansible.cfg, you will need to adjust the collection_path to your environment paths:
 
 ```bash
 [defaults]
@@ -264,9 +264,9 @@ The first file we are going to create is going be called `global.yml` and is goi
 
 ```yaml
 ---
-fabric:
+vxlan:
   global:
-    name: nac-nd-02
+    name: nac-ndfc1
     bgp_asn: 65001
     route_reflectors: 2
     anycast_gateway_mac: 12:34:56:78:90:00
@@ -284,10 +284,11 @@ This file will be named `topology_switches.yaml`. Here you will configure the ba
 
 ```yaml
 ---
-fabric:
+vxlan:
   topology:
     switches:
       - name: spine1
+        serial_number: 99H2TUPCVFK
         role: spine
         management:
           default_gateway_v4: 10.1.1.1
@@ -295,6 +296,7 @@ fabric:
         routing_loopback_id: 0
         vtep_loopback_id: 1
       - name: spine2
+        serial_number: 941L30Q8ZYI
         role: spine
         management:
           default_gateway_v4: 10.1.1.1
@@ -302,6 +304,7 @@ fabric:
         routing_loopback_id: 0
         vtep_loopback_id: 1
       - name: leaf1
+        serial_number: 9LWGEUPJOCM
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
@@ -309,6 +312,7 @@ fabric:
         routing_loopback_id: 0
         vtep_loopback_id: 1
       - name: leaf2
+        serial_number: 9YEXD0OHA7Z
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
@@ -316,6 +320,7 @@ fabric:
         routing_loopback_id: 0
         vtep_loopback_id: 1
       - name: leaf3
+        serial_number: 9M2TXMZ7D3N
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
@@ -323,6 +328,7 @@ fabric:
         routing_loopback_id: 0
         vtep_loopback_id: 1
       - name: leaf4
+        serial_number: 982YGMKUY2B
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
@@ -333,9 +339,11 @@ fabric:
 
 ### Underlay configuration
 
+This file will be named `underlay.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+
 ```yaml
 ---
-fabric:
+vxlan:
   underlay:
     general:
       routing_protocol: ospf
@@ -370,9 +378,11 @@ fabric:
 
 ### VRF configuration
 
+This file will be named `vrfs.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+
 ```yaml
 ---
-fabric:
+vxlan:
   overlay_services:
     vrfs:
       - name: NaC-ND2-VRF01
@@ -411,9 +421,11 @@ fabric:
 
 ### Network configuration
 
+This file will be named `networks.yaml`. Here you will configure the base topology inventory of the switches in the fabric. 
+
 ```yaml
 ---
-fabric:
+vxlan:
   overlay_services:
     networks:
       - name: NaC-ND2-Net01
