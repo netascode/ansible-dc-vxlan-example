@@ -1,6 +1,6 @@
 # Ansible NDFC VXLAN Example Repository
 
-This repository is designed to build the skeleton for the Network as Code DC VXLAN Ansible Galaxy collection. Cloaning this repository will create a working structure that you can build upon to automate your Cisco Nexus Data Center network using NDFC.
+This repository is designed to build the skeleton for the Network as Code DC VXLAN Ansible Galaxy Collection. Cloaning this repository will create a working structure that you can build upon to automate your Cisco Nexus Data Center network using Nexus Dashboard Fabric Controller (NDFC).
 
 ## Setting up environment for the collection
 
@@ -8,7 +8,7 @@ The first procedure for execution of the collection is going to be the installat
 
 ### Step 1 - Installing the example repository
 
-To simplify the usage of the collection we are providing you with an [example repository](https://github.com/netascode/ansible-dc-vxlan-example) that you can clone from github which creates the proper skeleton required, including examples for pipelines. Cloaning this repository requires the installation of [git client](https://git-scm.com/downloads) that is available for all platforms.
+To simplify the usage of the collection we are providing you with an [example repository](https://github.com/netascode/ansible-dc-vxlan-example) that you can clone from GitHub which creates the proper skeleton structure required, including examples for pipelines. Cloaning this repository requires the installation of [git client](https://git-scm.com/downloads) that is available for all platforms.
 
 Run the following command in the location of interest.
 
@@ -20,7 +20,7 @@ This will clone the repository into the directory nac-vxlan.
 
 ### Step 2 - Create the virtual environment with pyenv
 
-In this directory you will now create the new virtual environment and install a python version of your choice. At the _time of this writting_, a commonly used version is python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
+In this directory you will now create the new virtual environment and install a Python version of your choice. At the _time of this writting_, a commonly used version is Python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
 
 ```bash
 cd nac-vxlan
@@ -57,7 +57,7 @@ ansible-galaxy collection install -p collections/ansible_collections/ -r require
 
 You will need to then configure your ansible.cfg file to point to the correct location of the collection. 
 
-This sets the correct path for all the python modules and libraries in the virtual environment that was created. If you look in that directory you will find the collections package locations. Here is the base ansible.cfg, you will need to adjust the collection_path to your environment paths:
+This sets the correct path for all the Python modules and libraries in the virtual environment that was created. If you look in that directory you will find the collections package locations. Here is the base ansible.cfg, you will need to adjust the `collections_path` to your environment paths:
 
 ```bash
 [defaults]
