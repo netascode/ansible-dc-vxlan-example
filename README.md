@@ -1,14 +1,14 @@
 # Ansible NDFC VXLAN Example Repository
 
-This repository is designed to build the skeleton for the Network as Code DC VXLAN Ansible Galaxy Collection. Cloaning this repository will create a working structure that you can build upon to automate your Cisco Nexus Data Center network using Nexus Dashboard Fabric Controller (NDFC).
+This repository is designed to build the skeleton for the Network as Code DC VXLAN Ansible Galaxy Collection. Cloaning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard Fabric Controller (NDFC).
 
 ## Setting up environment for the collection
 
-The first procedure for execution of the collection is going to be the installation of a virtual environment to be able to install the collection and it's requirements. Recomendation is to utilize [pyenv](https://github.com/pyenv/pyenv) which provides a robust python virtual environment capability that also includes management of python versions. These instructions will be detailed around pyenv. For the pipeline execution please refer to *pipeline section* where it is documented at container level.
+Installation of a Python virtual environment is needed in order to install the collection and it's requirements. We recommend [pyenv](https://github.com/pyenv/pyenv) which provides a robust Python virtual environment capability that also allows for management of different python versions. The following instructions are detailed around using pyenv. For pipeline execution please refer to the *pipeline section* which is documented at container level.
 
 ### Step 1 - Installing the example repository
 
-To simplify the usage of the collection we are providing you with an [example repository](https://github.com/netascode/ansible-dc-vxlan-example) that you can clone from GitHub which creates the proper skeleton structure required, including examples for pipelines. Cloaning this repository requires the installation of [git client](https://git-scm.com/downloads) that is available for all platforms.
+To simplify getting started with this collection we are providing you with an [example repository](https://github.com/netascode/ansible-dc-vxlan-example) that you can clone from GitHub.  This repository creates the required skeleton structure including examples for pipelines. Cloaning this repository requires the installation of [git client](https://git-scm.com/downloads) which is available for all platforms.
 
 Run the following command in the location of interest.
 
@@ -20,7 +20,7 @@ This will clone the repository into the directory nac-vxlan.
 
 ### Step 2 - Create the virtual environment with pyenv
 
-In this directory you will now create the new virtual environment and install a Python version of your choice. At the _time of this writting_, a commonly used version is Python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
+In this directory create a new virtual environment and install a Python version of your choice. At the _time of this writting_, a commonly used version is Python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
 
 ```bash
 cd nac-vxlan
@@ -28,11 +28,11 @@ pyenv virtualenv <python_version> nac-ndfc
 pyenv local nac-ndfc
 ```
 
-The final command is `pyenv local` which sets the environment so that whenever you enter the directory it will change into the right virtual environment.
+Now execute command `pyenv local` which sets the environment so that whenever you enter the directory it will change into the right virtual environment.
 
 ### Step 3 - Install Ansible and additional required tools
 
-Included in the example repository is the requirements file to install ansible. First upgrade PIP to latest version.
+Included in the example repository is the requirements file to install Ansible. First upgrade PIP to latest version.
 
 ```bash
 pip install --upgrade pip
@@ -41,23 +41,23 @@ pip install -r requirements.txt
 
 ### Step 4 - Install Ansible Galaxy Collection (default placement)
 
-The default placement of the ansible galaxy collections would be in your home directory under `.ansible/collections/ansible_collections/`. To install the collection in the default location run the following command:
+The default placement for Ansible Galaxy Collections is in your home directory under `.ansible/collections/ansible_collections/`. To install the collection in the default location run the following command:
 
 ```bash
 ansible-galaxy collection install -r requirements.yml
 ```
 
-### Step 5 - Install Ansible Galaxy collection (non-default placement)
+### Step 5 - Install Ansible Galaxy Collection (non-default placement)
 
-If you wish to install the galaxy collection inside the repository you are creating with this example repository, you can run the following command:
+If you wish to install the Galaxy Collection inside the repository you are creating with this example repository, you can run the following command:
 
 ```bash
 ansible-galaxy collection install -p collections/ansible_collections/ -r requirements.yml
 ```
 
-You will need to then configure your ansible.cfg file to point to the correct location of the collection. 
+You will need to then configure your ansible.cfg file to point to the correct collection location. 
 
-This sets the correct path for all the Python modules and libraries in the virtual environment that was created. If you look in that directory you will find the collections package locations. Here is the base ansible.cfg, you will need to adjust the `collections_path` to your environment paths:
+This sets the correct path for all the Python modules and libraries in the virtual environment that was created. If you look in that directory you will find the collections package locations. Below is the base `ansible.cfg` file. You will need to adjust the `collections_path` to your environment paths:
 
 ```bash
 [defaults]
@@ -67,7 +67,7 @@ collections_path = ./collections/ansible_collections/
 
 ### Step 6 - Change Ansible callbacks
 
-If you wish to add any ansible callbacks ( the listed below expand on displaying time execution ) you can add the following to the ansible.cfg file:
+If you wish to add any ansible callbacks ( the listed below expand on displaying time execution ) you can add the following to the `ansible.cfg` file:
 
 ```ini
 callback_whitelist=ansible.posix.timer,ansible.posix.profile_tasks,ansible.posix.profile_roles
@@ -113,7 +113,11 @@ all:
           ansible_host: 10.X.X.X
 ```
 
-This structure creates two things in Ansible, a group called `ndfc` and a host called `nac-ndfc1:`. These are tied back to the directory structure of the repository that contains two folders in the top directory:
+This structure creates two things in Ansible:
+  * A group called `ndfc`
+  * A host called `nac-ndfc1`
+
+These are tied back to the directory structure of the repository that contains two folders in the top directory:
 
 ```mermaid
 graph
@@ -125,18 +129,17 @@ graph
   nac-ndfc1-->data_model_files
 ```
 
-The data model is **required** to exist under the `host_vars` directory structure. The inventory file is organizing how the variables are read through both the group_vars and the host_vars. Under the group_vars is where you will set the `connection.yml` file that has the credentials of the NDFC controller. Under the `host_vars` is where we will place the inventory.
+The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yml` file which stores the credential information for the NDFC controller.
 
-The collection is **pre-built** to utilize the `group_vars` and `host_vars` matching what is already constructed in the repository. Currently this methodology is a 1:1 relationship between code repository and NDFC fabric. For more complex environments, the inventory file can be expanded to include multiple groups and hosts including the usage of multi-site fabrics, explained in a separate document.
+The collection is **pre-built** to make use of the `group_vars` and `host_vars` data and matches what is already constructed in the repository. There is a 1:1 relationship between the code in the repository and the NDFC fabric. For more complex environments, the inventory file can be expanded to include multiple groups and hosts including managment of multi-site fabrics which is explained in a separate document.
 
 ### Step 1 - Update the inventory file
 
-In the provided `inventory.yml` file on the root directory, update the `ansible_host` variable to point to your NDFC controller by replacing `10.X.X.X` with the IP address of the NDFC controller.
-
+In the provided `inventory.yml` file in the root directory, update the `ansible_host` variable to point to your NDFC controller by replacing `10.X.X.X` with the IP address of the NDFC controller.
 
 ### Step 2 - Configure ansible connection file
 
-In the directory `group_vars/ndfc` is a file called `connection.yml` that contains example data as:
+In the directory `group_vars/ndfc` is a file called `connection.yml` that contains example data:
 
 ```yaml
 ---
@@ -157,21 +160,21 @@ ndfc_device_password: "{{ lookup('env', 'ndfc_device_password') }}"
 
 ```
 
-This file is going to contain the connection parameters for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` are set to establish connection to the NDFC controller. For the devices, you will set separate variables also configured as environment variables. The usage of environment variables is done for security reasons, so that the credentials are not stored in plain text in the repository. Accidentaly including your credentials in a repository is a very hard to remove. Hence, the usage of environment variables is recommended as a starting point.
+This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set different variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
 
-Also if you plan to eventually utilize a pipeline, the environment variables can be set in the pipeline configuration in a secure manner that is not exposed to the repository.
+Additionally, if a pipeline is required, the environment variables can be stored in the pipeline configuration using secure methods and prevents them from being exposed in the repository.
 
-The usage of [Ansible vault](https://docs.ansible.com/ansible/latest/vault_guide/index.html) is also possible to encrypt the contents of the connection file or simply encrypt the variables.
+[Ansible vault](https://docs.ansible.com/ansible/latest/vault_guide/index.html) can also be used to encrypt the contents of the connection file or simply encrypt the variables.
 
 ### Step 3 - Set environment variables
 
-The environment variables are set in the shell that is going to execute the playbook. The environment variables are configured via the `export` command in the shell (bash). Using this template set the environment variables to the correct credentials for the NDFC controller and the devices in the inventory on your topology.
+The environment variables should be set in the shell where the playbook is executed. They are configured via the `export` command in the shell (bash). Using this template set the environment variables to the correct credentials for the NDFC controller and the fabric devices that will be managed by NDFC.
 
 ```bash
-# These are the credentials for 
+# NDFC Controller Credentials 
 export ansible_user=admin
 export ansible_password=Admin_123
-# These are the credentials for the devices in the inventory
+# Fabric Devices Managed by NDFC
 export ndfc_device_username=admin
 export ndfc_device_password=Admin_123
 ```
@@ -182,32 +185,32 @@ export ndfc_device_password=Admin_123
 
 Role: [cisco.nac_dc_vxlan.validate](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/validate/README.md)
 
-The validate role function is to ensure that the data model is correct and that the data model is going to be able to be processed by the subsequent roles. The validate role is going to read all the files in the `host_vars` directory and create a single data model in memory for execution.
+The `validate` role ensures that the data model is correct and that the data model can be processed by the subsequent roles. The validate role reads all the files in the `host_vars` directory and create a single data model in memory for execution.
 
-As part of the VXLAN as Code service from Cisco, you will also be able to utilize the semantic validation to make sure that the data model matches the intended expected values. This is a powerful feature that allows you to ensure that the data model is correct before it is deployed to the network. Also part of the validate role is the ability to create rules that can be used to avoid operators from making specific configurations that are not allowed in the network. These can be as simple as ensuring naming convention to more complex rules for interconnectivity that would need to be avoided. These would be coded in python and can be constructed as part of the Services as Code offer. 
+As part of the VXLAN as Code service from Cisco, you will also be able to utilize the semantic validation feature to make sure that the data model matches the intended expected values. This is a powerful feature that allows you to ensure that the data model is correct before it is deployed to the network. Additonally the validate role allows creation of rules that can be used to prevent operators from making specific configurations that are not allowed in the network. These can be as simple as enforcing proper naming conventions to more complex rules for interconnectivity issues that should be avoided. These rules are coded in Python and can be constructed as part of the Services as Code offer. 
 
 ### Create role
 
 Role: [cisco.nac_dc_vxlan.dtc.create](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/dtc/create/README.md)
 
-This role is going to create all the templates and variable parameters that are going to be used in the deployment of the VXLAN fabric. This role converts the data model into the proper templates that are required by the Ansible module to be able to communicate with the NDFC controller.
+The `create` role builds all of the templates and variable parameters required to deploy the VXLAN fabric and creates fabric state in NDFC. The data model is converted into the proper templates required by the Ansible modules used to communicate with the NDFC controller and manage the fabric state.
 
 ### Deploy role
 
 Role: [cisco.nac_dc_vxlan.dtc.deploy](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/dtc/deploy/README.md)
 
-The deploy role is going to deploy those changes to the NDFC controller. This role is going to take the templates and variable parameters that were created in the `create` role and deploy them to the NDFC controller. This is the role that is going to make the changes in the NDFC controller.
+The `deploy` role deploys the fabric state created using the Create role to the NDFC managed devices.
 
 ### Remove role
 
 Role: [cisco.nac_dc_vxlan.dtc.remove](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/dtc/remove/README.md)
 
-The remove role is the opposite of the deploy role and removes what is represented in the data model from the NDFC controller. For this reason this role requires the settings of some variables to true under the `group_vars` directory. This is to avoid accidental removal of configuration from NDFC that might impact the network.
+The `remove` role removes state from the NDFC controller and the devices managed by the NDFC controller. When the collection discoveres managed state in NDFC that is not defined the the data model it gets removed by this role.  For this reason this role requires the following variables to be set to `true` under the `group_vars` directory. This avoids accidental removal of configuration from NDFC that might impact the network.
 
-Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yml` that contains some variables that need to be set to true to allow the removal of the configuration from the NDFC controller. The variables are:
+Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yml` that contains the variables:
 
 ```yaml
-# Parameters for the tasks in the 'Remove' role
+# Control Parameters for 'Remove' role tasks
 interface_delete_mode: false
 network_delete_mode: false
 vrf_delete_mode: false
@@ -215,7 +218,7 @@ inventory_delete_mode: false
 vpc_peering_delete_mode: false
 ```
 
-These variables are set to false by default to avoid accidental removal of configuration from NDFC that might impact the network. 
+**Note:** These variables are set to `false` by default to avoid accidental removal of configuration from NDFC that might impact the network. 
 
 ### Advantages of the roles in the workflow
 
