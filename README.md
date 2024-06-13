@@ -28,7 +28,7 @@ pyenv virtualenv <python_version> nac-ndfc
 pyenv local nac-ndfc
 ```
 
-Now execute command `pyenv local` which sets the environment so that whenever you enter the directory it will change into the right virtual environment.
+Executing command `pyenv local <env_name>` sets the environment so that whenever the directory is entered it will change into the right virtual environment.
 
 ### Step 3 - Install Ansible and additional required tools
 
@@ -222,11 +222,11 @@ vpc_peering_delete_mode: false
 
 ### Advantages of the roles in the workflow
 
-The primary advantage of the workflow is that you can insert these in different parts of the data model preparation and changes without having to worry about impacts to the network. The roles are designed to be idempotent and only make changes when there are changes in the data model. For different stages of changes in the network, you can comment out the roles that are not required to be executed. Leaving the final full execution potentially to only happen from a pipeline, yet allow for operators to validate changes before they are executed.
+These roles when run in sequence (validate, create, deploy, remove) are designed to build out the entire fabric and can be executed by a pipeline.  The roles can also be run in isolation by simply commenting out the roles that are not required during testing and fabric buildout to validate incremental changes.
 
 ## Building the primary playbook
 
-The playbook for the NDFC as Code collection is the execution point of the this automation collection. In difference to other automation with collections, what is in this playbook is mostly static and not going to change. What is executed during automation is based on changes in the data model. Hence as changes happen in the data model, the playbook will call the modules and based on what has changed in the data model, is what is going to execute.
+The following playbook for the NDFC as Code collection is the central execution point for this collection. Compared to automation in other collections, this playbook is designed to be mostly static and typically will not change. What gets executed during automation is based entirely on changes in the data model. When changes are made in the data model, the playbook will call the various roles and underlying modules to process the changes and update the NDFC managed fabric.
 
 The playbook is located in the root of the repository and is called `vxlan.yml`. It contains the following:
 
@@ -252,14 +252,14 @@ The playbook is located in the root of the repository and is called `vxlan.yml`.
     - role: cisco.nac_dc_vxlan.dtc.remove
 ```
 
-The `host` is defined as nac-ndfc1 which references back to the inventory file. The `roles` section is where the collection is going to be called.
+The `host` is defined as nac-ndfc1 which references back to the `inventory.yml` file. The `roles` section is where the various collection roles are called.
 
 The first role is `cisco.nac_dc_vxlan.validate` which is going to validate the data model. This is a required step to ensure that the data model is correct and that the data model is going to be able to be processed by the subsequent roles.
 
-The next roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxlan.dtc.deploy`, and `cisco.nac_dc_vxlan.dtc.remove`. These roles are the primary roles that will invoke change in NDFC. The `create` role is going to create all the templates and variable parameters . The `deploy` role is going to deploy those changes to the NDFC controller. The `remove` role would remove the data model from the devices in the inventory.
+The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxlan.dtc.deploy`, and `cisco.nac_dc_vxlan.dtc.remove` roles. These roles are the primary roles that will invoke changes in NDFC as described earlier.
 
-> **Note**: For your safety, the `remove` role also requires settings some variables to true under the `group_vars` directory. This is to avoid accidental removal of configuration from NDFC that might impact the network. This will be covered in a section below.
 
+> **Note**: For your safety as indicated ealier, the `remove` role also requires setting some variables to `true` under the `group_vars` directory. This is to avoid accidental removal of configuration from NDFC that might impact the network. This will be covered in more detail below.
 
 Since each of these roles are separte, you may configure the playbook to only execute the roles that are required. For example, as you are building your data model and getting to know the collection, you may comment out the `deploy` and `remove` roles to only execute the `validate` and `create` role. This provides a quick way to make sure that the data model is structured correctly.
 
