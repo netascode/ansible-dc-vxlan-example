@@ -4,7 +4,7 @@ This repository is designed to build the skeleton for the [Network as Code DC VX
 
 ## Setting up environment for the collection
 
-Installation of a Python virtual environment is needed in order to install the collection and it's requirements. We recommend [pyenv](https://github.com/pyenv/pyenv) which provides a robust Python virtual environment capability that also allows for management of different python versions. The following instructions are detailed around using pyenv. For pipeline execution please refer to the *pipeline section* which is documented at container level.
+Installation of a Python virtual environment is needed in order to install the collection and it's requirements. We recommend [pyenv](https://github.com/pyenv/pyenv) which provides a robust Python virtual environment capability that also allows for management of different Python versions. The following instructions are detailed around using pyenv. For pipeline execution please refer to the *pipeline section* which is documented at container level.
 
 ### Step 1 - Installing the example repository
 
@@ -24,7 +24,7 @@ In this directory create a new virtual environment and install a Python version 
 
 ```bash
 cd nac-vxlan
-pyenv virtualenv <python_version> nac-ndfc
+pyenv virtualenv <Python_version> nac-ndfc
 pyenv local nac-ndfc
 ```
 
