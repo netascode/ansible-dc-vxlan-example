@@ -263,6 +263,8 @@ The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxla
 
 The playbook can be configured to execute only the roles that are required. For example, as you are building your data model and familiarizing yourself with the collection, you may comment out the `deploy` and `remove` roles and only execute the `validate` and `create` roles. This provides a quick way to make sure that the data model is structured correctly.
 
+## Service Model Data
+
 The following sample data is available under the `host_vars/nac-ndfc1` directory in this repository.  This data can be used to build out your first fabric using this collection.  The data will be processed by the main `vxlan.yaml` playbook and do the following:
 
 ### Global configuration
@@ -477,13 +479,14 @@ vxlan:
 
 ## Running the Playbook
 
-The following playbook command can be run to build the fabric as follows:
-
-* Create a fabric called `nac-ndfc1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
-* Add 2 Spine and 4 Leaf devices using the data defined in the `topology_switches.nac.yaml` file.
-* Add 3 VRFs and 3 Networks using the data defined in `vrfs.nac.yaml` and `networks.nac.yaml` files.
-
+Run the playbook using the following command:
 
 ```bash
 ansible-playbook -i inventory.yaml vxlan.yaml
 ```
+
+The outcome will result in the following:
+
+* Create a fabric called `nac-ndfc1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
+* Add 2 Spine and 4 Leaf devices using the data defined in the `topology_switches.nac.yaml` file.
+* Add 3 VRFs and 3 Networks using the data defined in `vrfs.nac.yaml` and `networks.nac.yaml` files.
