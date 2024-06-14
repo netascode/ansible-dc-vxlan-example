@@ -44,7 +44,7 @@ pip install -r requirements.txt
 The default placement for Ansible Galaxy Collections is in your home directory under `.ansible/collections/ansible_collections/`. To install the collection in the default location run the following command:
 
 ```bash
-ansible-galaxy collection install -r requirements.yml
+ansible-galaxy collection install -r requirements.yaml
 ```
 
 ### Step 5 - Install Ansible Galaxy Collection (non-default placement)
@@ -52,7 +52,7 @@ ansible-galaxy collection install -r requirements.yml
 If you wish to install the Galaxy Collection inside the repository you are creating with this example repository, you can run the following command:
 
 ```bash
-ansible-galaxy collection install -p collections/ansible_collections/ -r requirements.yml
+ansible-galaxy collection install -p collections/ansible_collections/ -r requirements.yaml
 ```
 
 You will need to then configure your ansible.cfg file to point to the correct collection location. 
@@ -99,7 +99,7 @@ ansible [core 2.16.3]
 
 ## Inventory host files
 
-As is standard with Ansible best practices, inventory files provide the destination targets for the automation. For this collection, the inventory file is a YAML file that contains the information about the devices that are going to be configured. The inventory files is called `inventory.yml` and is located in the root of the repository.
+As is standard with Ansible best practices, inventory files provide the destination targets for the automation. For this collection, the inventory file is a YAML file that contains the information about the devices that are going to be configured. The inventory files is called `inventory.yaml` and is located in the root of the repository.
 
 The inventory file is going to contain a structure similar to this:
 
@@ -124,22 +124,22 @@ graph
   root-->group_vars
   root-->host_vars
   group_vars-->ndfc
-  ndfc-->connection.yml
+  ndfc-->connection.yaml
   host_vars-->nac-ndfc1
   nac-ndfc1-->data_model_files
 ```
 
-The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yml` file which stores the credential information for the NDFC controller.
+The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yaml` file which stores the credential information for the NDFC controller.
 
 The collection is **pre-built** to make use of the `group_vars` and `host_vars` data and matches what is already constructed in the repository. There is a 1:1 relationship between the code in the repository and the NDFC fabric. For more complex environments, the inventory file can be expanded to include multiple groups and hosts including managment of multi-site fabrics which is explained in a separate document.
 
 ### Step 1 - Update the inventory file
 
-In the provided `inventory.yml` file in the root directory, update the `ansible_host` variable to point to your NDFC controller by replacing `10.X.X.X` with the IP address of the NDFC controller.
+In the provided `inventory.yaml` file in the root directory, update the `ansible_host` variable to point to your NDFC controller by replacing `10.X.X.X` with the IP address of the NDFC controller.
 
 ### Step 2 - Configure ansible connection file
 
-In the directory `group_vars/ndfc` is a file called `connection.yml` that contains example data:
+In the directory `group_vars/ndfc` is a file called `connection.yaml` that contains example data:
 
 ```yaml
 ---
@@ -207,7 +207,7 @@ Role: [cisco.nac_dc_vxlan.dtc.remove](https://github.com/netascode/ansible-dc-vx
 
 The `remove` role removes state from the NDFC controller and the devices managed by the NDFC controller. When the collection discoveres managed state in NDFC that is not defined the the data model it gets removed by this role.  For this reason this role requires the following variables to be set to `true` under the `group_vars` directory. This avoids accidental removal of configuration from NDFC that might impact the network.
 
-Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yml` that contains the variables:
+Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yaml` that contains the variables:
 
 ```yaml
 # Control Parameters for 'Remove' role tasks
@@ -228,7 +228,7 @@ These roles when run in sequence (validate, create, deploy, remove) are designed
 
 The following playbook for the NDFC as Code collection is the central execution point for this collection. Compared to automation in other collections, this playbook is designed to be mostly static and typically will not change. What gets executed during automation is based entirely on changes in the data model. When changes are made in the data model, the playbook will call the various roles and underlying modules to process the changes and update the NDFC managed fabric.
 
-The playbook is located in the root of the repository and is called `vxlan.yml`. It contains the following:
+The playbook is located in the root of the repository and is called `vxlan.yaml`. It contains the following:
 
 ```yaml
 ---
@@ -252,7 +252,7 @@ The playbook is located in the root of the repository and is called `vxlan.yml`.
     - role: cisco.nac_dc_vxlan.dtc.remove
 ```
 
-The `host` is defined as nac-ndfc1 which references back to the `inventory.yml` file. The `roles` section is where the various collection roles are called.
+The `host` is defined as nac-ndfc1 which references back to the `inventory.yaml` file. The `roles` section is where the various collection roles are called.
 
 The first role is `cisco.nac_dc_vxlan.validate` which is going to validate the data model. This is a required step to ensure that the data model is correct and that the data model is going to be able to be processed by the subsequent roles.
 
@@ -477,8 +477,13 @@ vxlan:
 
 ## Running the Playbook
 
-The following playbook command can be run to build the fabric.
+The following playbook command can be run to build the fabric as follows:
+
+* Create a fabric called `nac-ndfc1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
+* Add 2 Spine and 4 Leaf devices using the data defined in the `topology_switches.nac.yaml` file.
+* Add 3 VRFs and 3 Networks using the data defined in `vrfs.nac.yaml` and `networks.nac.yaml` files.
+
 
 ```bash
-ansible-playbook -i inventory.yml vxlan.yml
+ansible-playbook -i inventory.yaml vxlan.yaml
 ```
