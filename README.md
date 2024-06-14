@@ -261,12 +261,13 @@ The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxla
 
 > **Note**: For your safety as indicated ealier, the `remove` role also requires setting some variables to `true` under the `group_vars` directory. This is to avoid accidental removal of configuration from NDFC that might impact the network. This will be covered in more detail below.
 
-Since each of these roles are separte, you may configure the playbook to only execute the roles that are required. For example, as you are building your data model and getting to know the collection, you may comment out the `deploy` and `remove` roles to only execute the `validate` and `create` role. This provides a quick way to make sure that the data model is structured correctly.
+The playbook can be configured to execute only the roles that are required. For example, as you are building your data model and familiarizing yourself with the collection, you may comment out the `deploy` and `remove` roles and only execute the `validate` and `create` roles. This provides a quick way to make sure that the data model is structured correctly.
 
+The following sample data is available under the `host_vars/nac-ndfc1` directory in this repository.  This data can be used to build out your first fabric using this collection.  The data will be processed by the main `vxlan.yaml` playbook and do the following:
 
 ### Global configuration
 
-The first file we are going to create is going be called `global.yml` and is going to contain the global parameters for the VXLAN fabric.
+This data is defined in `host_vars/nac-ndfc1/global.nac.yaml` and contains the global parameters for the VXLAN fabric.
 
 ```yaml
 ---
@@ -286,7 +287,7 @@ vxlan:
 
 ### Topology inventory configuration
 
-This file will be named `topology_switches.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This data is defined in `host_vars/nac-ndfc1/topology_switches.nac.yaml` and contains the base topology inventory for switches in the fabric.
 
 ```yaml
 ---
@@ -345,7 +346,7 @@ vxlan:
 
 ### Underlay configuration
 
-This file will be named `underlay.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This data is defined in `host_vars/nac-ndfc1/underlay.nac.yaml` and contains the underlay settings for the fabric.
 
 ```yaml
 ---
@@ -384,7 +385,7 @@ vxlan:
 
 ### VRF configuration
 
-This file will be named `vrfs.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This data is defined in `host_vars/nac-ndfc1/vrfs.nac.yaml` and contains the overlay VRF data.
 
 ```yaml
 ---
@@ -427,7 +428,7 @@ vxlan:
 
 ### Network configuration
 
-This file will be named `networks.yml`. Here you will configure the base topology inventory of the switches in the fabric. 
+This data is defined in `host_vars/nac-ndfc1/networks.nac.yaml` and contains the overlay Network data.
 
 ```yaml
 ---
@@ -476,7 +477,7 @@ vxlan:
 
 ## Running the Playbook
 
-Once you have completed the steps above, the playbook can be run using the following command from the root directory of the repository.
+The following playbook command can be run to build the fabric.
 
 ```bash
 ansible-playbook -i inventory.yml vxlan.yml
