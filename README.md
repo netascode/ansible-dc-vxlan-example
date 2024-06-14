@@ -265,7 +265,7 @@ The playbook can be configured to execute only the roles that are required. For 
 
 ## Service Model Data
 
-The following sample data is available under the `host_vars/nac-ndfc1` directory in this repository.  This data can be used to build out your first fabric using this collection.  The data will be processed by the main `vxlan.yaml` playbook and do the following:
+The following sample data is available under the `host_vars/nac-ndfc1` directory in this repository.  This data can be used to build out your first fabric using this collection.
 
 ### Global configuration
 
@@ -280,10 +280,10 @@ vxlan:
     route_reflectors: 2
     anycast_gateway_mac: 12:34:56:78:90:00
     dns_servers:
-      - ip_address: 10.x.x.x
+      - ip_address: 10.0.0.2
         vrf: management
     ntp_servers:
-      - ip_address: 10.x.x.x
+      - ip_address: 10.55.0.2
         vrf: management
 ```
 
@@ -296,52 +296,52 @@ This data is defined in `host_vars/nac-ndfc1/topology_switches.nac.yaml` and con
 vxlan:
   topology:
     switches:
-      - name: spine1
+      - name: netascode-spine1
         serial_number: 99H2TUPCVFK
         role: spine
         management:
           default_gateway_v4: 10.1.1.1
-          management_ipv4_address: 10.0.0.11
+          management_ipv4_address: 10.1.1.21
         routing_loopback_id: 0
         vtep_loopback_id: 1
-      - name: spine2
+      - name: netascode-spine2
         serial_number: 941L30Q8ZYI
         role: spine
         management:
           default_gateway_v4: 10.1.1.1
-          management_ipv4_address: 10.0.0.12
+          management_ipv4_address: 10.1.1.22
         routing_loopback_id: 0
         vtep_loopback_id: 1
-      - name: leaf1
+      - name: netascode-leaf1
         serial_number: 9LWGEUPJOCM
+        role: leaf
+        management:
+          default_gateway_v4: 10.1.1.1
+          management_ipv4_address: 10.1.1.11
+        routing_loopback_id: 0
+        vtep_loopback_id: 1
+      - name: netascode-leaf2
+        serial_number: 9YEXD0OHA7Z
+        role: leaf
+        management:
+          default_gateway_v4: 10.1.1.1
+          management_ipv4_address: 10.1.1.12
+        routing_loopback_id: 0
+        vtep_loopback_id: 1
+      - name: netascode-leaf3
+        serial_number: 9M2TXMZ7D3N
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.13
         routing_loopback_id: 0
         vtep_loopback_id: 1
-      - name: leaf2
-        serial_number: 9YEXD0OHA7Z
-        role: leaf
-        management:
-          default_gateway_v4: 10.1.1.1
-          management_ipv4_address: 10.1.1.14
-        routing_loopback_id: 0
-        vtep_loopback_id: 1
-      - name: leaf3
-        serial_number: 9M2TXMZ7D3N
-        role: leaf
-        management:
-          default_gateway_v4: 10.1.1.1
-          management_ipv4_address: 10.1.1.15
-        routing_loopback_id: 0
-        vtep_loopback_id: 1
-      - name: leaf4
+      - name: netascode-leaf4
         serial_number: 982YGMKUY2B
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
-          management_ipv4_address: 10.1.1.16
+          management_ipv4_address: 10.1.1.14
         routing_loopback_id: 0
         vtep_loopback_id: 1
 ```
@@ -394,37 +394,37 @@ This data is defined in `host_vars/nac-ndfc1/vrfs.nac.yaml` and contains the ove
 vxlan:
   overlay_services:
     vrfs:
-      - name: NaC-ND2-VRF01
+      - name: NaC-VRF01
         vrf_id: 150001
         vlan_id: 2001
         attach_group: all
-      - name: NaC-ND2-VRF02
+      - name: NaC-VRF02
         vrf_id: 150002
         vlan_id: 2002
         attach_group: leaf1
-      - name: NaC-ND2-VRF03
+      - name: NaC-VRF03
         vrf_id: 150003
         vlan_id: 2003
         attach_group: leaf2
     vrf_attach_groups:
       - name: all
         switches:
-          - { hostname: 10.1.1.13 }
-          - { hostname: 10.1.1.14 }
-          - { hostname: 10.1.1.15 }
-          - { hostname: 10.1.1.16 }
+          - { hostname: netascode-leaf1 }
+          - { hostname: netascode-leaf2 }
+          - { hostname: netascode-leaf3 }
+          - { hostname: netascode-leaf4 }
       - name: leaf1
         switches:
-          - { hostname: 10.1.1.13 }
+          - { hostname: netascode-leaf1 }
       - name: leaf2
         switches:
-          - { hostname: 10.1.1.14 }
+          - { hostname: netascode-leaf2 }
       - name: leaf3
         switches:
-          - { hostname: 10.1.1.15 }
+          - { hostname: netascode-leaf3 }
       - name: leaf4
         switches:
-          - { hostname: 10.1.1.16 }
+          - { hostname: netascode-leaf4 }
 ```
 
 
@@ -437,26 +437,25 @@ This data is defined in `host_vars/nac-ndfc1/networks.nac.yaml` and contains the
 vxlan:
   overlay_services:
     networks:
-      - name: NaC-ND2-Net01
-        vrf_name: NaC-ND2-VRF01
+      - name: NaC-Net01
+        vrf_name: NaC-VRF01
         net_id: 130001
         vlan_id: 2301
-        vlan_name: NaC-ND2-Net01_vlan2301
+        vlan_name: NaC-Net01_vlan2301
         gw_ip_address: "192.168.12.1/24"
         attach_group: all
-      - name: NaC-ND2-Net02
-        vrf_name: NaC-ND2-VRF02
-        # is_l2_only: True
+      - name: NaC-Net02
+        vrf_name: NaC-VRF02
         net_id: 130002
         vlan_id: 2302
-        vlan_name: NaC-ND2-Net02_vlan2302
+        vlan_name: NaC-Net02_vlan2302
         gw_ip_address: "192.168.12.2/24"
         attach_group: leaf1
-      - name: NaC-ND2-Net03
-        vrf_name: NaC-ND2-VRF03
+      - name: NaC-Net03
+        vrf_name: NaC-VRF03
         net_id: 130003
         vlan_id: 2303
-        vlan_name: NaC-ND2-Net03_vlan2303
+        vlan_name: NaC-Net03_vlan2303
         gw_ip_address: "192.168.12.3/24"
         gw_ipv6_address: "2001::1/64"
         route_target_both: True
@@ -467,14 +466,14 @@ vxlan:
     network_attach_groups:
       - name: all
         switches:
-          - { hostname: 10.1.1.13, ports: [Ethernet1/13, Ethernet1/14] }
-          - { hostname: 10.1.1.14, ports: [Ethernet1/13, Ethernet1/14] }
+          - { hostname: netascode-leaf1, ports: [Ethernet1/13, Ethernet1/14] }
+          - { hostname: netascode-leaf2, ports: [Ethernet1/13, Ethernet1/14] }
       - name: leaf1
         switches:
-          - { hostname: 10.1.1.13, ports: [] }
+          - { hostname: netascode-leaf1, ports: [] }
       - name: leaf2
         switches:
-          - { hostname: 10.1.1.14, ports: [] }
+          - { hostname: netascode-leaf2, ports: [] }
 ```
 
 ## Running the Playbook
@@ -485,7 +484,7 @@ Run the playbook using the following command:
 ansible-playbook -i inventory.yaml vxlan.yaml
 ```
 
-The outcome will result in the following:
+The data in `host_vars/nac-ndfc1` will be processed by the main `vxlan.yaml` playbook and do the following:
 
 * Create a fabric called `nac-ndfc1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
 * Add 2 Spine and 4 Leaf devices using the data defined in the `topology_switches.nac.yaml` file.
