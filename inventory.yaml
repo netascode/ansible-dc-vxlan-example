@@ -2,11 +2,6 @@
 
 all:
   children:
-    #
-    # In the case of direct to device (DTD) this ndfc group would
-    # not be used and instead the fabric would be defined 
-    # in the main.yml playbook entry point.
-    #
     ndfc:
       hosts:
         nac-ndfc1:
