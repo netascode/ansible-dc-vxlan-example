@@ -152,11 +152,11 @@ ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_network_os: cisco.dcnm.dcnm
 # NDFC API Credentials
-ansible_user: "{{ lookup('env', 'ansible_user') }}"
-ansible_password: "{{ lookup('env', 'ansible_password') }}"
+ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
+ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
 # Credentials for devices in Inventory
-ndfc_device_username: "{{ lookup('env', 'ndfc_device_username') }}"
-ndfc_device_password: "{{ lookup('env', 'ndfc_device_password') }}"
+ndfc_switch_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
+ndfc_switch_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
 
 ```
 
@@ -171,12 +171,12 @@ Additionally, if a pipeline is required, the environment variables can be stored
 The environment variables should be set in the shell where the playbook is executed. They are configured via the `export` command in the shell (bash). Using this template set the environment variables to the correct credentials for the NDFC controller and the fabric devices that will be managed by NDFC.
 
 ```bash
-# NDFC Controller Credentials 
-export ansible_user=admin
-export ansible_password=Admin_123
-# Fabric Devices Managed by NDFC
-export ndfc_device_username=admin
-export ndfc_device_password=Admin_123
+# These are the credentials for 
+export ND_USERNAME=admin
+export ND_PASSWORD=Admin_123
+# These are the credentials for the devices in the inventory
+export NDFC_SW_USERNAME=admin
+export NDFC_SW_PASSWORD=Admin_123
 ```
 
 ## Understanding our Ansible roles
