@@ -155,8 +155,8 @@ ansible_network_os: cisco.dcnm.dcnm
 ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
 ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
 # Credentials for devices in Inventory
-ndfc_switch_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
-ndfc_switch_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
+ndfc_device_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
+ndfc_device_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
 
 ```
 
