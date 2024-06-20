@@ -1,0 +1,13 @@
+---
+vxlan:
+  global:
+    name: nac-ndfc1
+    bgp_asn: 65001
+    route_reflectors: 2
+    anycast_gateway_mac: 12:34:56:78:90:00
+    dns_servers:
+      - ip_address: 10.0.0.2
+        vrf: management
+    ntp_servers:
+      - ip_address: 10.55.0.2
+        vrf: management
