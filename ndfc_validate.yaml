@@ -1,0 +1,11 @@
+---
+# This is the main entry point playbook for calling the various
+# roles in this collection.
+- hosts: nac-ndfc1
+  any_errors_fatal: true
+  gather_facts: no
+
+  roles:
+    # Validate user data based on model
+    #
+    - role: cisco.nac_dc_vxlan.validate
