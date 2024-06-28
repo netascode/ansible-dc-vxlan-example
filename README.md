@@ -154,13 +154,13 @@ ansible_network_os: cisco.dcnm.dcnm
 # NDFC API Credentials
 ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
 ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
-# Credentials for devices in Inventory
-ndfc_device_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
-ndfc_device_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
+# Credentials for switches in inventory
+ndfc_switch_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
+ndfc_switch_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
 
 ```
 
-This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_device_username` and `ndfc_device_password` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
+This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_switch_username` and `ndfc_switch_username` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
 
 Additionally, if a pipeline is required, the environment variables can be stored in the pipeline configuration using secure methods and prevents them from being exposed in the repository.
 
@@ -242,14 +242,20 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
     # Prepare service model for all subsequent roles
     #
     - role: cisco.nac_dc_vxlan.validate
+      tags: 'role_validate'
 
     # -----------------------
     # DataCenter Roles
     #   Role: cisco.netascode_dc_vxlan.dtc manages direct to controller NDFC workflows
     #
     - role: cisco.nac_dc_vxlan.dtc.create
+      tags: 'role_create'
+
     - role: cisco.nac_dc_vxlan.dtc.deploy
+      tags: 'role_deploy'
+
     - role: cisco.nac_dc_vxlan.dtc.remove
+      tags: 'role_remove'
 ```
 
 The `host` is defined as nac-ndfc1 which references back to the `inventory.yaml` file. The `roles` section is where the various collection roles are called.
@@ -262,6 +268,24 @@ The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxla
 > **Note**: For your safety as indicated ealier, the `remove` role also requires setting some variables to `true` under the `group_vars` directory. This is to avoid accidental removal of configuration from NDFC that might impact the network. This will be covered in more detail below.
 
 The playbook can be configured to execute only the roles that are required. For example, as you are building your data model and familiarizing yourself with the collection, you may comment out the `deploy` and `remove` roles and only execute the `validate` and `create` roles. This provides a quick way to make sure that the data model is structured correctly.
+
+------
+**Role Level Tags:**
+
+To speed up execution when only certain roles need to be run the following role level tags are provided:
+
+ * role_validate - Select and run `cisco.nac_dc_vxlan.validate` role
+ * role_create - Select and run `cisco.nac_dc_vxlan.create` role
+ * role_deploy  - Select and run `cisco.nac_dc_vxlan.deploy` role
+ * role_remove  - Select and run `cisco.nac_dc_vxlan.remove` role
+
+The validate role will automatically run if tags `role_create, role_deploy, role_remove` are specified.
+
+Example: Selectively Run `cisco.nac_dc_vxlan.create` role alone
+
+```bash
+ansible-playbook -i inventory.yml vxlan.yml --tags role_create
+```
 
 ## Service Model Data
 
