@@ -155,12 +155,12 @@ ansible_network_os: cisco.dcnm.dcnm
 ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
 ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
 # Credentials for devices in Inventory
-ndfc_device_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
-ndfc_device_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
+ndfc_switch_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
+ndfc_switch_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
 
 ```
 
-This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_device_username` and `ndfc_device_password` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
+This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_switch_username` and `ndfc_switch_username` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
 
 Additionally, if a pipeline is required, the environment variables can be stored in the pipeline configuration using secure methods and prevents them from being exposed in the repository.
 
