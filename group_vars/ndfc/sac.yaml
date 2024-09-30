@@ -1,4 +1,5 @@
 ---
 
 schema_path: "{{ lookup('ansible.builtin.env', 'DC_VXLAN_SCHEMA') }}"
+custom_defaults_path: "{{ lookup('ansible.builtin.env', 'DC_VXLAN_CUSTOM_DEFAULTS') }}"
 enhanced_rules_path: "{{ lookup('ansible.builtin.env', 'DC_VXLAN_RULES') }}"
