@@ -7,10 +7,9 @@
 
   roles:
     # Prepare service model for all subsequent roles
+    # Note - The validate role is run automatically as a prerequisite to the create, deploy, and remove roles.
     #
-    - role: cisco.nac_dc_vxlan.validate
-      tags: 'role_validate'
-
+    # - role: cisco.nac_dc_vxlan.validate
     # -----------------------
     # DataCenter Roles
     #   Role: cisco.netascode_dc_vxlan.dtc manages direct to controller NDFC workflows
