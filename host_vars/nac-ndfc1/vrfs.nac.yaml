@@ -5,15 +5,15 @@ vxlan:
       - name: NaC-VRF01
         vrf_id: 150001
         vlan_id: 2001
-        attach_group: all
+        vrf_attach_group: all
       - name: NaC-VRF02
         vrf_id: 150002
         vlan_id: 2002
-        attach_group: leaf1
+        vrf_attach_group: leaf1
       - name: NaC-VRF03
         vrf_id: 150003
         vlan_id: 2003
-        attach_group: leaf2
+        vrf_attach_group: leaf2
     vrf_attach_groups:
       - name: all
         switches:
