@@ -3,5 +3,6 @@ ansible-lint
 iac-validate==0.2.5
 iac-test==0.2.5
 macaddress
+netaddr
 packaging==24.1
 requests
