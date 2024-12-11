@@ -111,7 +111,13 @@ all:
       hosts:
         nac-ndfc1:
           ansible_host: 10.X.X.X
+        nac-ndfc1-ipv6:
+          ansible_host: "[2001:XXX:XXXX:XXXX::XX]"
 ```
+
+> [!NOTE]
+> For IPv6 the ansible_host must be formated like the example above
+> "[ipv6 address]"
 
 This structure creates two things in Ansible:
   * A group called `ndfc`
