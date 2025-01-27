@@ -9,3 +9,4 @@ link_vpc_delete_mode: false
 interface_delete_mode: false
 vrf_delete_mode: false
 network_delete_mode: false
+policy_delete_mode: false
