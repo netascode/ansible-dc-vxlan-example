@@ -306,8 +306,10 @@ This data is defined in `host_vars/nac-ndfc1/global.nac.yaml` and contains the g
 ```yaml
 ---
 vxlan:
-  global:
+  fabric:
     name: nac-ndfc1
+    type: VXLAN_EVPN
+  global:
     bgp_asn: 65001
     route_reflectors: 2
     anycast_gateway_mac: 12:34:56:78:90:00
@@ -424,7 +426,7 @@ This data is defined in `host_vars/nac-ndfc1/vrfs.nac.yaml` and contains the ove
 ```yaml
 ---
 vxlan:
-  overlay_services:
+  overlay:
     vrfs:
       - name: NaC-VRF01
         vrf_id: 150001
@@ -467,7 +469,7 @@ This data is defined in `host_vars/nac-ndfc1/networks.nac.yaml` and contains the
 ```yaml
 ---
 vxlan:
-  overlay_services:
+  overlay:
     networks:
       - name: NaC-Net01
         vrf_name: NaC-VRF01
