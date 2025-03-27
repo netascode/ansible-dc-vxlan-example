@@ -1,6 +1,6 @@
 ---
 vxlan:
-  overlay_services:
+  overlay:
     vrfs:
       - name: NaC-VRF01
         vrf_id: 150001
