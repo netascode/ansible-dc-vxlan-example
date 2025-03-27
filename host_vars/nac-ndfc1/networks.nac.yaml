@@ -1,6 +1,6 @@
 ---
 vxlan:
-  overlay_services:
+  overlay:
     networks:
       - name: NaC-Net01
         vrf_name: NaC-VRF01
