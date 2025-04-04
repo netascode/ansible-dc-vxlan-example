@@ -4,5 +4,5 @@ all:
   children:
     ndfc:
       hosts:
-        nac-ndfc1:
+        nac-fabric1:
           ansible_host: "{{ lookup('ansible.builtin.env', 'ND_HOST') }}"

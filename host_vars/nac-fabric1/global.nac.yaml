@@ -1,7 +1,7 @@
 ---
 vxlan:
   fabric:
-    name: nac-ndfc1
+    name: nac-fabric1
     type: VXLAN_EVPN
   global:
     bgp_asn: 65001
