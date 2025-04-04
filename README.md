@@ -109,9 +109,9 @@ all:
   children:
     ndfc:
       hosts:
-        nac-ndfc1:
+        nac-fabric1:
           ansible_host: 10.X.X.X
-        nac-ndfc1-ipv6:
+        nac-fabric1-ipv6:
           ansible_host: "[2001:XXX:XXXX:XXXX::XX]"
 ```
 
@@ -121,7 +121,7 @@ all:
 
 This structure creates two things in Ansible:
   * A group called `ndfc`
-  * A host called `nac-ndfc1`
+  * A host called `nac-fabric1`
 
 These are tied back to the directory structure of the repository that contains two folders in the top directory:
 
@@ -131,8 +131,8 @@ graph
   root-->host_vars
   group_vars-->ndfc
   ndfc-->connection.yaml
-  host_vars-->nac-ndfc1
-  nac-ndfc1-->data_model_files
+  host_vars-->nac-fabric1
+  nac-fabric1-->data_model_files
 ```
 
 The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yaml` file which stores the credential information for the NDFC controller.
@@ -243,7 +243,7 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
 ---
 # This is the main entry point playbook for calling the various
 # roles in this collection.
-- hosts: nac-ndfc1
+- hosts: nac-fabric1
   any_errors_fatal: true
   gather_facts: no
 
@@ -266,7 +266,7 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
       tags: 'role_remove'
 ```
 
-The `host` is defined as nac-ndfc1 which references back to the `inventory.yaml` file. The `roles` section is where the various collection roles are called.
+The `host` is defined as nac-fabric1 which references back to the `inventory.yaml` file. The `roles` section is where the various collection roles are called.
 
 The first role is `cisco.nac_dc_vxlan.validate` which is going to validate the data model. This is a required step to ensure that the data model is correct and that the data model is going to be able to be processed by the subsequent roles.
 
@@ -297,17 +297,17 @@ ansible-playbook -i inventory.yml vxlan.yml --tags role_create
 
 ## Service Model Data
 
-The following sample data is available under the `host_vars/nac-ndfc1` directory in this repository.  This data can be used to build out your first fabric using this collection.
+The following sample data is available under the `host_vars/nac-fabric1` directory in this repository.  This data can be used to build out your first fabric using this collection.
 
 ### Global configuration
 
-This data is defined in `host_vars/nac-ndfc1/global.nac.yaml` and contains the global parameters for the VXLAN fabric.
+This data is defined in `host_vars/nac-fabric1/global.nac.yaml` and contains the global parameters for the VXLAN fabric.
 
 ```yaml
 ---
 vxlan:
   fabric:
-    name: nac-ndfc1
+    name: nac-fabric1
     type: VXLAN_EVPN
   global:
     bgp_asn: 65001
@@ -323,7 +323,7 @@ vxlan:
 
 ### Topology inventory configuration
 
-This data is defined in `host_vars/nac-ndfc1/topology_switches.nac.yaml` and contains the base topology inventory for switches in the fabric.
+This data is defined in `host_vars/nac-fabric1/topology_switches.nac.yaml` and contains the base topology inventory for switches in the fabric.
 
 ```yaml
 ---
@@ -382,7 +382,7 @@ vxlan:
 
 ### Underlay configuration
 
-This data is defined in `host_vars/nac-ndfc1/underlay.nac.yaml` and contains the underlay settings for the fabric.
+This data is defined in `host_vars/nac-fabric1/underlay.nac.yaml` and contains the underlay settings for the fabric.
 
 ```yaml
 ---
@@ -421,7 +421,7 @@ vxlan:
 
 ### VRF configuration
 
-This data is defined in `host_vars/nac-ndfc1/vrfs.nac.yaml` and contains the overlay VRF data.
+This data is defined in `host_vars/nac-fabric1/vrfs.nac.yaml` and contains the overlay VRF data.
 
 ```yaml
 ---
@@ -464,7 +464,7 @@ vxlan:
 
 ### Network configuration
 
-This data is defined in `host_vars/nac-ndfc1/networks.nac.yaml` and contains the overlay Network data.
+This data is defined in `host_vars/nac-fabric1/networks.nac.yaml` and contains the overlay Network data.
 
 ```yaml
 ---
@@ -518,8 +518,8 @@ Run the playbook using the following command:
 ansible-playbook -i inventory.yaml vxlan.yaml
 ```
 
-The data in `host_vars/nac-ndfc1` will be processed by the main `vxlan.yaml` playbook and do the following:
+The data in `host_vars/nac-fabric1` will be processed by the main `vxlan.yaml` playbook and do the following:
 
-* Create a fabric called `nac-ndfc1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
+* Create a fabric called `nac-fabric1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
 * Add 2 Spine and 4 Leaf devices using the data defined in the `topology_switches.nac.yaml` file.
 * Add 3 VRFs and 3 Networks using the data defined in `vrfs.nac.yaml` and `networks.nac.yaml` files.
