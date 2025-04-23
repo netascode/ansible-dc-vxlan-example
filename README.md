@@ -216,15 +216,17 @@ The `remove` role removes state from the NDFC controller and the devices managed
 Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yaml` that contains the variables:
 
 ```yaml
-# Control Parameters for 'Remove' role tasks
+# Parameters for the tasks in the 'Remove' role
 interface_delete_mode: false
 inventory_delete_mode: false
-link_fabric_delete_mode: false
 link_vpc_delete_mode: false
+multisite_child_fabric_delete_mode: false
+multisite_network_delete_mode: false
+multisite_vrf_delete_mode: false
 network_delete_mode: false
 policy_delete_mode: false
-vpc_delete_mode: false
 vrf_delete_mode: false
+vpc_delete_mode: false
 ```
 
 **Note:** These variables are set to `false` by default to avoid accidental removal of configuration from NDFC that might impact the network. 
