@@ -6,8 +6,8 @@ stages:
   - test
 
 variables:
-  ND_URL:
-    description: "Cisco ND URL"
+  ND_HOST:
+    description: "Cisco ND HOST"
   ND_DOMAIN:
     description: "Cisco ND Domain"
   ND_USERNAME:
