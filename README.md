@@ -1,6 +1,6 @@
 # Ansible NDFC VXLAN Example Repository
 
-This repository is designed to build the skeleton for the [Network as Code DC VXLAN Ansible Galaxy Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nac_dc_vxlan/). Cloaning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard Fabric Controller (NDFC).
+This repository is designed to build the skeleton for the [Network as Code DC VXLAN Ansible Galaxy Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nac_dc_vxlan/). Cloning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard Fabric Controller (NDFC).
 
 ## Setting up environment for the collection
 
@@ -20,7 +20,7 @@ This will clone the repository into the directory nac-vxlan.
 
 ### Step 2 - Create the virtual environment with pyenv
 
-In this directory create a new virtual environment and install a Python version of your choice. At the _time of this writting_, a commonly used version is Python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
+In this directory create a new virtual environment and install a Python version of your choice. At the _time of writting_, a commonly used version is Python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
 
 ```bash
 cd nac-vxlan
@@ -109,13 +109,19 @@ all:
   children:
     ndfc:
       hosts:
-        nac-ndfc1:
+        nac-fabric1:
           ansible_host: 10.X.X.X
+        nac-fabric1-ipv6:
+          ansible_host: "[2001:XXX:XXXX:XXXX::XX]"
 ```
+
+> [!NOTE]
+> For IPv6 the ansible_host must be formated like the example above
+> "[ipv6 address]"
 
 This structure creates two things in Ansible:
   * A group called `ndfc`
-  * A host called `nac-ndfc1`
+  * A host called `nac-fabric1`
 
 These are tied back to the directory structure of the repository that contains two folders in the top directory:
 
@@ -125,8 +131,8 @@ graph
   root-->host_vars
   group_vars-->ndfc
   ndfc-->connection.yaml
-  host_vars-->nac-ndfc1
-  nac-ndfc1-->data_model_files
+  host_vars-->nac-fabric1
+  nac-fabric1-->data_model_files
 ```
 
 The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yaml` file which stores the credential information for the NDFC controller.
@@ -154,13 +160,13 @@ ansible_network_os: cisco.dcnm.dcnm
 # NDFC API Credentials
 ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
 ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
-# Credentials for devices in Inventory
-ndfc_device_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
-ndfc_device_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
+# Credentials for switches in inventory
+ndfc_switch_username: "{{ lookup('env', 'NDFC_SW_USERNAME') }}"
+ndfc_switch_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
 
 ```
 
-This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_device_username` and `ndfc_device_password` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
+This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_switch_username` and `ndfc_switch_username` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
 
 Additionally, if a pipeline is required, the environment variables can be stored in the pipeline configuration using secure methods and prevents them from being exposed in the repository.
 
@@ -171,7 +177,7 @@ Additionally, if a pipeline is required, the environment variables can be stored
 The environment variables should be set in the shell where the playbook is executed. They are configured via the `export` command in the shell (bash). Using this template set the environment variables to the correct credentials for the NDFC controller and the fabric devices that will be managed by NDFC.
 
 ```bash
-# These are the credentials for 
+# These are the credentials for ND
 export ND_USERNAME=admin
 export ND_PASSWORD=Admin_123
 # These are the credentials for the devices in the inventory
@@ -210,12 +216,17 @@ The `remove` role removes state from the NDFC controller and the devices managed
 Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yaml` that contains the variables:
 
 ```yaml
-# Control Parameters for 'Remove' role tasks
+# Parameters for the tasks in the 'Remove' role
 interface_delete_mode: false
-network_delete_mode: false
-vrf_delete_mode: false
 inventory_delete_mode: false
-vpc_peering_delete_mode: false
+link_vpc_delete_mode: false
+multisite_child_fabric_delete_mode: false
+multisite_network_delete_mode: false
+multisite_vrf_delete_mode: false
+network_delete_mode: false
+policy_delete_mode: false
+vrf_delete_mode: false
+vpc_delete_mode: false
 ```
 
 **Note:** These variables are set to `false` by default to avoid accidental removal of configuration from NDFC that might impact the network. 
@@ -234,7 +245,7 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
 ---
 # This is the main entry point playbook for calling the various
 # roles in this collection.
-- hosts: nac-ndfc1
+- hosts: nac-fabric1
   any_errors_fatal: true
   gather_facts: no
 
@@ -248,11 +259,16 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
     #   Role: cisco.netascode_dc_vxlan.dtc manages direct to controller NDFC workflows
     #
     - role: cisco.nac_dc_vxlan.dtc.create
+      tags: 'role_create'
+
     - role: cisco.nac_dc_vxlan.dtc.deploy
+      tags: 'role_deploy'
+
     - role: cisco.nac_dc_vxlan.dtc.remove
+      tags: 'role_remove'
 ```
 
-The `host` is defined as nac-ndfc1 which references back to the `inventory.yaml` file. The `roles` section is where the various collection roles are called.
+The `host` is defined as nac-fabric1 which references back to the `inventory.yaml` file. The `roles` section is where the various collection roles are called.
 
 The first role is `cisco.nac_dc_vxlan.validate` which is going to validate the data model. This is a required step to ensure that the data model is correct and that the data model is going to be able to be processed by the subsequent roles.
 
@@ -263,19 +279,39 @@ The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxla
 
 The playbook can be configured to execute only the roles that are required. For example, as you are building your data model and familiarizing yourself with the collection, you may comment out the `deploy` and `remove` roles and only execute the `validate` and `create` roles. This provides a quick way to make sure that the data model is structured correctly.
 
+------
+**Role Level Tags:**
+
+To speed up execution when only certain roles need to be run the following role level tags are provided:
+
+ * role_validate - Select and run `cisco.nac_dc_vxlan.validate` role
+ * role_create - Select and run `cisco.nac_dc_vxlan.create` role
+ * role_deploy  - Select and run `cisco.nac_dc_vxlan.deploy` role
+ * role_remove  - Select and run `cisco.nac_dc_vxlan.remove` role
+
+The validate role will automatically run if tags `role_create, role_deploy, role_remove` are specified.
+
+Example: Selectively Run `cisco.nac_dc_vxlan.create` role alone
+
+```bash
+ansible-playbook -i inventory.yaml vxlan.yaml --tags role_create
+```
+
 ## Service Model Data
 
-The following sample data is available under the `host_vars/nac-ndfc1` directory in this repository.  This data can be used to build out your first fabric using this collection.
+The following sample data is available under the `host_vars/nac-fabric1` directory in this repository.  This data can be used to build out your first fabric using this collection.
 
 ### Global configuration
 
-This data is defined in `host_vars/nac-ndfc1/global.nac.yaml` and contains the global parameters for the VXLAN fabric.
+This data is defined in `host_vars/nac-fabric1/global.nac.yaml` and contains the global parameters for the VXLAN fabric.
 
 ```yaml
 ---
 vxlan:
+  fabric:
+    name: nac-fabric1
+    type: VXLAN_EVPN
   global:
-    name: nac-ndfc1
     bgp_asn: 65001
     route_reflectors: 2
     anycast_gateway_mac: 12:34:56:78:90:00
@@ -289,7 +325,7 @@ vxlan:
 
 ### Topology inventory configuration
 
-This data is defined in `host_vars/nac-ndfc1/topology_switches.nac.yaml` and contains the base topology inventory for switches in the fabric.
+This data is defined in `host_vars/nac-fabric1/topology_switches.nac.yaml` and contains the base topology inventory for switches in the fabric.
 
 ```yaml
 ---
@@ -348,7 +384,7 @@ vxlan:
 
 ### Underlay configuration
 
-This data is defined in `host_vars/nac-ndfc1/underlay.nac.yaml` and contains the underlay settings for the fabric.
+This data is defined in `host_vars/nac-fabric1/underlay.nac.yaml` and contains the underlay settings for the fabric.
 
 ```yaml
 ---
@@ -387,12 +423,12 @@ vxlan:
 
 ### VRF configuration
 
-This data is defined in `host_vars/nac-ndfc1/vrfs.nac.yaml` and contains the overlay VRF data.
+This data is defined in `host_vars/nac-fabric1/vrfs.nac.yaml` and contains the overlay VRF data.
 
 ```yaml
 ---
 vxlan:
-  overlay_services:
+  overlay:
     vrfs:
       - name: NaC-VRF01
         vrf_id: 150001
@@ -430,12 +466,12 @@ vxlan:
 
 ### Network configuration
 
-This data is defined in `host_vars/nac-ndfc1/networks.nac.yaml` and contains the overlay Network data.
+This data is defined in `host_vars/nac-fabric1/networks.nac.yaml` and contains the overlay Network data.
 
 ```yaml
 ---
 vxlan:
-  overlay_services:
+  overlay:
     networks:
       - name: NaC-Net01
         vrf_name: NaC-VRF01
@@ -484,8 +520,8 @@ Run the playbook using the following command:
 ansible-playbook -i inventory.yaml vxlan.yaml
 ```
 
-The data in `host_vars/nac-ndfc1` will be processed by the main `vxlan.yaml` playbook and do the following:
+The data in `host_vars/nac-fabric1` will be processed by the main `vxlan.yaml` playbook and do the following:
 
-* Create a fabric called `nac-ndfc1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
+* Create a fabric called `nac-fabric1` using the data from `global.nac.yaml` and `underlay.nac.yaml` files.
 * Add 2 Spine and 4 Leaf devices using the data defined in the `topology_switches.nac.yaml` file.
 * Add 3 VRFs and 3 Networks using the data defined in `vrfs.nac.yaml` and `networks.nac.yaml` files.
