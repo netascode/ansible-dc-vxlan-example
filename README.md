@@ -216,7 +216,8 @@ The `remove` role removes state from the NDFC controller and the devices managed
 Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yaml` that contains the variables:
 
 ```yaml
-# Control Parameters for 'Remove' role tasks in VXLAN EVPN fabric
+# Control Parameters for 'Remove' role tasks in VXLAN EVPN, External, and ISN fabrics
+edge_connections_delete_mode: false
 interface_delete_mode: false
 inventory_delete_mode: false
 link_fabric_delete_mode: false
