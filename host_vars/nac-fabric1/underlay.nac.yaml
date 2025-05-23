@@ -21,7 +21,7 @@ vxlan:
       underlay_subnet_ip_range: 10.1.0.0/16
     ipv6:
       enable_ipv6_link_local_address: false
-      underlay_subnet_mask: 64
+      underlay_subnet_mask: 126
     ospf:
       area_id: 0.0.0.0
       authentication_enable: false
