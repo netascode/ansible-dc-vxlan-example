@@ -5,8 +5,6 @@ vxlan:
       routing_protocol: ospf
       enable_ipv6_underlay: false
       replication_mode: multicast
-      fabric_interface_numbering: p2p
-      subnet_mask: 31
       underlay_routing_loopback_id: 0
       underlay_vtep_loopback_id: 1
       underlay_routing_protocol_tag: UNDERLAY
@@ -15,6 +13,8 @@ vxlan:
       layer2_host_interface_mtu: 9216
       unshut_host_interfaces: true
     ipv4:
+      fabric_interface_numbering: p2p
+      subnet_mask: 31
       underlay_routing_loopback_ip_range: 10.0.0.0/22
       underlay_vtep_loopback_ip_range: 10.100.100.0/22
       underlay_rp_loopback_ip_range: 10.250.250.0/24
