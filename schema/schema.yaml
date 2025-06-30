@@ -1,0 +1,72 @@
+# This is a simplified version of the schema for demonstration purposes.
+
+---
+vxlan: include('vxlan', required=False)
+defaults: any(required=False)
+---
+vxlan:
+  fabric: include('fabric', required=False)
+  global: include('global', required=False)
+  topology: include('topology', required=False)
+  underlay: include('underlay', required=False)
+
+fabric:
+  name: str()
+  type: enum('VXLAN_EVPN')
+
+global:
+  name: str(required=False)
+  fabric_type: enum('VXLAN_EVPN', 'External', required=False)
+  bgp_asn: str()
+  route_reflectors: int(min=1, required=False)
+  anycast_gateway_mac: any()
+
+topology:
+  switches: list(include('topology_switch'), required=False)
+
+topology_switch:
+  name: str()
+  serial_number: regex('^[a-zA-Z0-9_.:-]{1,16}$', required=False)
+  role: enum('spine', 'leaf', 'border', required=False)
+  management: include('topology_switch_management', required=False)
+
+topology_switch_management:
+  default_gateway_v4: ip(version=4, required=False)
+  management_ipv4_address: ip(version=4, required=False)
+
+underlay:
+  general: include('underlay_general', required=False)
+  ipv4: include('underlay_ipv4', required=False)
+  ipv6: include('underlay_ipv6', required=False)
+  ospf: include('underlay_ospf', required=False)
+
+underlay_general:
+  routing_protocol: enum('ospf', 'is-is', 'bgp', required=False)
+  enable_ipv6_underlay: bool(required=False)
+  replication_mode: enum('multicast', required=False)
+  underlay_routing_loopback_id: int(required=False)
+  underlay_vtep_loopback_id: int(required=False)
+  underlay_routing_protocol_tag: str(required=False)
+  underlay_rp_loopback_id: int(required=False)
+  intra_fabric_interface_mtu: int(required=False)
+  unshut_host_interfaces: bool(required=False)
+
+underlay_ipv4:
+  underlay_routing_loopback_ip_range: str(required=False)
+  underlay_vtep_loopback_ip_range: str(required=False)
+  underlay_rp_loopback_ip_range: str(required=False)
+  underlay_subnet_ip_range: str(required=False)
+
+underlay_ipv6:
+  enable_ipv6_link_local_address: bool(required=False)
+  underlay_subnet_mask: int(required=False)
+
+underlay_ospf:
+  area_id: str(required=False)
+  authentication_enable: bool(required=False)
+  authentication_key_id: int(required=False)
+  authentication_key: str(required=False)
+
+underlay_multicast:
+  underlay_rp_loopback_id: int(required=False)
+  underlay_primary_rp_loopback_id: int(required=False)
