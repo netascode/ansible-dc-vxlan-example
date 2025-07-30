@@ -86,6 +86,8 @@ test-integration:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
+    - pip uninstall -y nac-test || true
+    - pip install --cache-dir .pip_cache -r requirements.txt
     - set -o pipefail && iac-test -d ./host_vars/nac-fabric1 -d ./group_vars/ndfc/defaults.yaml -t ./tests/templates -o ./tests/results/nac-fabric1 |& tee test_output.txt
   artifacts:
     when: always
