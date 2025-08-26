@@ -2,7 +2,7 @@ ansible-core==2.16.3
 ansible-lint
 jmespath
 nac-yaml==1.0.0
-nac-validate==1.0.0
+iac-validate==0.2.7
 macaddress
 netaddr
 packaging==24.1
