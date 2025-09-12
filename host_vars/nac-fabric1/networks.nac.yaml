@@ -23,19 +23,27 @@ vxlan:
         vlan_name: NaC-Net03_vlan2303
         gw_ip_address: "192.168.12.3/24"
         gw_ipv6_address: "2001::1/64"
-        route_target_both: True
-        l3gw_on_border: True
-        mtu_l3intf: 7600
+        route_target_both: true
+        l3gw_on_border: true
+        mtu_l3intf: 9000
         int_desc: "Configured by NetAsCode"
         network_attach_group: leaf2
     network_attach_groups:
       - name: all
         switches:
-          - { hostname: netascode-leaf1, ports: [Ethernet1/13, Ethernet1/14] }
-          - { hostname: netascode-leaf2, ports: [Ethernet1/13, Ethernet1/14] }
+          - hostname: netascode-leaf1
+            ports:
+              - Ethernet1/13
+              - Ethernet1/14
+          - hostname: netascode-leaf2
+            ports:
+              - Ethernet1/13
+              - Ethernet1/14
       - name: leaf1
         switches:
-          - { hostname: netascode-leaf1, ports: [] }
+          - hostname: netascode-leaf1
+            ports: []
       - name: leaf2
         switches:
-          - { hostname: netascode-leaf2, ports: [] }
+          - hostname: netascode-leaf2
+            ports: []
