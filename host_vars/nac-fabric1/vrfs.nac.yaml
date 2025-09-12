@@ -17,19 +17,19 @@ vxlan:
     vrf_attach_groups:
       - name: all
         switches:
-          - { hostname: netascode-leaf1 }
-          - { hostname: netascode-leaf2 }
-          - { hostname: netascode-leaf3 }
-          - { hostname: netascode-leaf4 }
+          - hostname: netascode-leaf1
+          - hostname: netascode-leaf2
+          - hostname: netascode-leaf3
+          - hostname: netascode-leaf4
       - name: leaf1
         switches:
-          - { hostname: netascode-leaf1 }
+          - hostname: netascode-leaf1
       - name: leaf2
         switches:
-          - { hostname: netascode-leaf2 }
+          - hostname: netascode-leaf2
       - name: leaf3
         switches:
-          - { hostname: netascode-leaf3 }
+          - hostname: netascode-leaf3
       - name: leaf4
         switches:
-          - { hostname: netascode-leaf4 }
+          - hostname: netascode-leaf4
