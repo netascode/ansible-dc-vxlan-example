@@ -1,6 +1,7 @@
 ---
-image: mtarking/nac-vxlan:24.0.1
+image: danischm/nac:0.1.5
 stages:
+  - setup
   - validate
   - deploy
   - test
@@ -23,42 +24,76 @@ variables:
   NDFC_SW_PASSWORD:
     description: "Cisco NDFC Switch Password"
 
-validate:
-  stage: validate
+cache:
+  paths:
+    - .pip_cache/
+
+setup:
+  stage: setup
   rules:
     - if: $CI_COMMIT_TAG == null
   script:
-    - set -o pipefail && ansible-playbook -i inventory.yml ndfc_validate.yml |& tee validate_output.txt
+    - echo "Setting up environment..."
+    - pip install --cache-dir .pip_cache -r requirements.txt --force-reinstall
+    - ansible-galaxy collection install -U -f -p ./collections/ansible_collections/ -r requirements.yaml
   artifacts:
     paths:
-      - validate_output.txt
+      - collections/ansible_collections/
+
+validate:
+  stage: validate
+  dependencies:
+    - setup
+  needs:
+    - setup
+  rules:
+    - if: $CI_COMMIT_TAG == null
+  script:
+    - set -o pipefail && ansible-playbook -i inventory.yaml ndfc_validate.yaml |& tee nac_fabric1_validate_output.txt
+  artifacts:
+    paths:
+      - nac_fabric1_validate_output.txt
+      - collections/ansible_collections/
   cache: []
 
 deploy:
   stage: deploy
   dependencies:
+    - setup
+    - validate
+  needs:
+    - setup
     - validate
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
   script:
-    - set -o pipefail && ansible-playbook -i inventory.yml vxlan.yml |& tee deploy_output.txt
+    - pip install --cache-dir .pip_cache -r requirements.txt
+    - set -o pipefail && ansible-playbook -i inventory.yaml vxlan.yaml |& tee nac_fabric1_deploy_output.txt
+  artifacts:
+    when: always
+    paths:
+      - nac_fabric1_deploy_output.txt
+  cache: []
 
 test-integration:
   stage: test
   dependencies:
+    - setup
     - deploy
   needs:
+    - setup
     - deploy
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
-    - set -o pipefail && iac-test -d ./host_vars/nac-ndfc1 -d ./group_vars/ndfc/defaults.yaml -t ./tests/templates -f ./tests/filters -o ./tests/results/ndfc |& tee test_output.txt
+    - pip uninstall -y nac-test || true
+    - pip install --cache-dir .pip_cache -r requirements.txt
+    - set -o pipefail && iac-test -d ./host_vars/nac-fabric1 -d ./group_vars/ndfc/defaults.yaml -t ./tests/templates -o ./tests/results/nac-fabric1 |& tee test_output.txt
   artifacts:
     when: always
     paths:
-      - tests/results/ndfc/*.html
-      - tests/results/ndfc/xunit.xml
+      - tests/results/nac-fabric1/*.html
+      - tests/results/nac-fabric1/xunit.xml
       - test_output.txt
     reports:
-      junit: tests/results/ndfc/xunit.xml
+      junit: tests/results/nac-fabric1/xunit.xml
