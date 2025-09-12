@@ -2,7 +2,7 @@
 
 all:
   children:
-    ndfc:
+    nd:
       hosts:
         nac-fabric1:
           ansible_host: "{{ lookup('ansible.builtin.env', 'ND_HOST') }}"
