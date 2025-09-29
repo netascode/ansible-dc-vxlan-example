@@ -3,7 +3,7 @@
 # roles in this collection.
 - hosts: nac-ndfc1
   any_errors_fatal: true
-  gather_facts: no
+  gather_facts: false
 
   roles:
     # Validate user data based on model
