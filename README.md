@@ -251,7 +251,7 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
 # roles in this collection.
 - hosts: nac-fabric1
   any_errors_fatal: true
-  gather_facts: no
+  gather_facts: false
 
   roles:
     # Prepare service model for all subsequent roles
