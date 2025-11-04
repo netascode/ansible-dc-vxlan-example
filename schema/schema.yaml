@@ -1,4 +1,5 @@
 # This is a simplified version of the schema for demonstration purposes.
+# Updated for v0.5.1
 
 ---
 vxlan: include('vxlan', required=False)
@@ -9,49 +10,98 @@ vxlan:
   global: include('global', required=False)
   topology: include('topology', required=False)
   underlay: include('underlay', required=False)
+  overlay: include('overlay', required=False)
 
 fabric:
   name: str()
-  type: enum('VXLAN_EVPN')
+  type: enum('VXLAN_EVPN', 'eBGP_VXLAN', 'External', 'ISN', 'MSD')
 
+# v0.5.1: global is now organized by fabric type
 global:
+  # Deprecated keys (maintained for backwards compatibility)
   name: str(required=False)
   fabric_type: enum('VXLAN_EVPN', 'External', required=False)
-  bgp_asn: str()
+  bgp_asn: str(required=False)
   route_reflectors: int(min=1, required=False)
-  anycast_gateway_mac: any()
+  anycast_gateway_mac: any(required=False)
+  # New v0.5.1 structure
+  ibgp: include('global_ibgp', required=False)
+  ebgp: include('global_ebgp', required=False)
+  external: include('global_external', required=False)
 
+# iBGP EVPN fabric (VXLAN_EVPN)
+global_ibgp:
+  bgp_asn: str()
+  route_reflectors: enum(2, 4, required=False)
+  anycast_gateway_mac: any()
+  dns_servers: list(include('common_dns_server'), required=False)
+  ntp_servers: list(include('common_ntp_server'), required=False)
+  syslog_servers: list(include('common_syslog_server'), required=False)
+  overlay_mode: enum('cli', 'config-profile', required=False)
+
+# eBGP EVPN fabric (eBGP_VXLAN)
+global_ebgp:
+  spine_bgp_asn: str()
+  bgp_asn_mode: enum('Multi-AS', 'Same-Tier-AS', required=False)
+  anycast_gateway_mac: any()
+  overlay_mode: enum('cli', 'config-profile', required=False)
+
+# External fabric
+global_external:
+  bgp_asn: str()
+
+# Manageability servers
+common_dns_server:
+  ip_address: str()
+  vrf: str()
+
+common_ntp_server:
+  ip_address: str()
+  vrf: str()
+
+common_syslog_server:
+  ip_address: str()
+  vrf: str()
+  severity: int(min=0, max=7, required=False)
+
+# Topology section
 topology:
   switches: list(include('topology_switch'), required=False)
 
 topology_switch:
   name: str()
   serial_number: regex('^[a-zA-Z0-9_.:-]{1,16}$', required=False)
-  role: enum('spine', 'leaf', 'border', required=False)
+  role: enum('spine', 'leaf', 'border', 'border_spine', 'border_gateway', 'super_spine', 'tor', required=False)
   management: include('topology_switch_management', required=False)
 
 topology_switch_management:
   default_gateway_v4: ip(version=4, required=False)
   management_ipv4_address: ip(version=4, required=False)
+  subnet_mask_v4: int(min=8, max=30, required=False)
 
+# Underlay section
 underlay:
   general: include('underlay_general', required=False)
   ipv4: include('underlay_ipv4', required=False)
   ipv6: include('underlay_ipv6', required=False)
   ospf: include('underlay_ospf', required=False)
+  multicast: include('underlay_multicast', required=False)
 
 underlay_general:
   routing_protocol: enum('ospf', 'is-is', 'bgp', required=False)
   enable_ipv6_underlay: bool(required=False)
-  replication_mode: enum('multicast', required=False)
+  replication_mode: enum('multicast', 'ingress', required=False)
   underlay_routing_loopback_id: int(required=False)
   underlay_vtep_loopback_id: int(required=False)
   underlay_routing_protocol_tag: str(required=False)
   underlay_rp_loopback_id: int(required=False)
   intra_fabric_interface_mtu: int(required=False)
+  layer2_host_interface_mtu: int(required=False)
   unshut_host_interfaces: bool(required=False)
 
 underlay_ipv4:
+  fabric_interface_numbering: enum('p2p', 'unnumbered', required=False)
+  subnet_mask: int(min=8, max=31, required=False)
   underlay_routing_loopback_ip_range: str(required=False)
   underlay_vtep_loopback_ip_range: str(required=False)
   underlay_rp_loopback_ip_range: str(required=False)
@@ -70,3 +120,49 @@ underlay_ospf:
 underlay_multicast:
   underlay_rp_loopback_id: int(required=False)
   underlay_primary_rp_loopback_id: int(required=False)
+
+# Overlay section
+overlay:
+  vrfs: list(include('overlay_vrfs'), required=False)
+  networks: list(include('overlay_networks'), required=False)
+  vrf_attach_groups: list(include('overlay_vrf_attach_group'), required=False)
+  network_attach_groups: list(include('overlay_network_attach_group'), required=False)
+
+# VRF definition
+overlay_vrfs:
+  name: str()
+  vrf_id: int(min=1, max=16777214, required=False)
+  vlan_id: int(min=1, max=4094, required=False)
+  vrf_attach_group: str(required=False)
+
+# Network definition
+overlay_networks:
+  name: str()
+  vrf_name: str(required=False)
+  net_id: int(min=1, max=16777214, required=False)
+  vlan_id: int(min=1, max=4094, required=False)
+  vlan_name: str(required=False)
+  int_desc: str(required=False)
+  gw_ip_address: str(required=False)
+  gw_ipv6_address: str(required=False)
+  mtu_l3intf: int(required=False)
+  route_target_both: bool(required=False)
+  l3gw_on_border: bool(required=False)
+  network_attach_group: str(required=False)
+
+# VRF attach groups
+overlay_vrf_attach_group:
+  name: str()
+  switches: list(include('overlay_vrf_attach_group_switch'), required=False)
+
+overlay_vrf_attach_group_switch:
+  hostname: str()
+
+# Network attach groups
+overlay_network_attach_group:
+  name: str()
+  switches: list(include('overlay_network_attach_group_switch'), required=False)
+
+overlay_network_attach_group_switch:
+  hostname: str()
+  ports: list(str(), required=False)

@@ -20,7 +20,7 @@ This will clone the repository into the directory nac-vxlan.
 
 ### Step 2 - Create the virtual environment with pyenv
 
-In this directory create a new virtual environment and install a Python version of your choice. At the _time of writting_, a commonly used version is Python version 3.10.13.  Command `pyenv install 3.10.13` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
+In this directory create a new virtual environment and install a Python version of your choice. At the _time of writing_, a commonly used version is Python version 3.12.10.  Command `pyenv install 3.12.10` will install this version. For detailed instructions please visit the [pyenv](https://github.com/pyenv/pyenv) site.
 
 ```bash
 cd nac-vxlan
@@ -87,13 +87,13 @@ Your output should be similar to the output below
 
 ```bash
 ansible [core 2.16.3]
-  config file = /Users/username/tmp/nac-vxlan/ansible.cfg
+  config file = /Users/username/network-as-code/sac-ndfc/nac-ndfc/ansible.cfg
   configured module search path = ['/Users/username/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /Users/username/.pyenv/versions/3.10.13/envs/nac-ndfc/lib/python3.10/site-packages/ansible
-  ansible collection location = /Users/username/path/to/collections/ansible_collections
-  executable location = /Users/username/.pyenv/versions/nac-ndfc/bin/ansible
-  python version = 3.10.13 (main, Oct 29 2023, 00:04:17) [Clang 15.0.0 (clang-1500.0.40.1)] (/Users/username/.pyenv/versions/3.10.13/envs/nac-ndfc/bin/python3.10)
-  jinja version = 3.1.4
+  ansible python module location = /Users/username/.pyenv/versions/nac-nd/lib/python3.12/site-packages/ansible
+  ansible collection location = /Users/username/.pyenv/versions/3.12.10/envs/nac-nd/lib/python3.12/site-packages/ansible/collections:/Users/username/network-as-code/sac-ndfc/nac-ndfc/collections/ansible_collections
+  executable location = /Users/username/.pyenv/versions/nac-nd/bin/ansible
+  python version = 3.12.10 (main, Oct 21 2025, 11:35:29) [Clang 17.0.0 (clang-1700.3.19.1)] (/Users/username/.pyenv/versions/nac-nd/bin/python3)
+  jinja version = 3.1.6
   libyaml = True
 ```
 
@@ -311,20 +311,22 @@ This data is defined in `host_vars/nac-fabric1/global.nac.yaml` and contains the
 
 ```yaml
 ---
+# v0.5.1: Using vxlan.global.ibgp structure for iBGP EVPN fabric
 vxlan:
   fabric:
     name: nac-fabric1
     type: VXLAN_EVPN
   global:
-    bgp_asn: 65001
-    route_reflectors: 2
-    anycast_gateway_mac: 12:34:56:78:90:00
-    dns_servers:
-      - ip_address: 10.0.0.2
-        vrf: management
-    ntp_servers:
-      - ip_address: 10.55.0.2
-        vrf: management
+    ibgp:
+      bgp_asn: "65001"
+      route_reflectors: 2
+      anycast_gateway_mac: 12:34:56:78:90:00
+      dns_servers:
+        - ip_address: 10.0.0.2
+          vrf: management
+      ntp_servers:
+        - ip_address: 10.55.0.2
+          vrf: management
 ```
 
 ### Topology inventory configuration
