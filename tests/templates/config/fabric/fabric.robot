@@ -7,7 +7,7 @@ Library          String
 Suite Setup      Login NDFC
 Default Tags     ndfc    day2    config    fabric
 
-{% set fabric = vxlan.fabric.name | default(vxlan.global.name) %}
+{% set fabric = vxlan.fabric.name %}
 
 *** Test Cases ***
 Get All Parameters from Fabric {{ fabric }}
@@ -16,12 +16,12 @@ Get All Parameters from Fabric {{ fabric }}
 
 Verify Fabric {{ fabric }} Global Parameters
     Should Be Equal Value Json String   ${r.json()}   $..FABRIC_NAME   {{ fabric }}   msg=name
-    Should Be Equal Value Json String   ${r.json()}   $..BGP_AS   {{ vxlan.global.bgp_asn }}   msg=bgp_asn
+    Should Be Equal Value Json String   ${r.json()}   $..BGP_AS   {{ vxlan.global.ibgp.bgp_asn }}   msg=bgp_asn
     Should Be Equal Value Json String   ${r.json()}   $..fabricType   Switch_Fabric   msg=fabricType
     Should Be Equal Value Json String   ${r.json()}   $..OVERLAY_MODE   cli   msg=OVERLAY_MODE
     Should Be Equal Value Json String   ${r.json()}   $..GRFIELD_DEBUG_FLAG   Enable   msg=GRFIELD_DEBUG_FLAG
 
-Verify Fabric {{ fabric }} Underlay General Parameters 
+Verify Fabric {{ fabric }} Underlay General Parameters
     Should Be Equal Value Json String   ${r.json()}   $..BGP_LB_ID   {{ vxlan.underlay.general.underlay_routing_loopback_id | default(defaults.vxlan.underlay.general.underlay_routing_loopback_id) }}   msg=BGP_LB_ID
     Should Be Equal Value Json String   ${r.json()}   $..NVE_LB_ID   {{ vxlan.underlay.general.underlay_vtep_loopback_id | default(defaults.vxlan.underlay.general.underlay_vtep_loopback_id) }}   msg=NVE_LB_ID
     Should Be Equal Value Json String   ${r.json()}   $..FABRIC_MTU   {{ vxlan.underlay.general.intra_fabric_interface_mtu | default(defaults.vxlan.underlay.general.intra_fabric_interface_mtu) }}   msg=FABRIC_MTU
@@ -29,13 +29,13 @@ Verify Fabric {{ fabric }} Underlay General Parameters
 Verify Fabric {{ fabric }} Underlay Multicast Parameters
     Should Be Equal Value Json String   ${r.json()}   $..REPLICATION_MODE   {{ vxlan.underlay.general.replication_mode | default(defaults.vxlan.underlay.general.replication_mode) | title }}   msg=REPLICATION_MODE
 {% if (vxlan.underlay.general.replication_mode | default(defaults.vxlan.underlay.general.replication_mode) | title) == 'Multicast' %}
-    Should Be Equal Value Json String   ${r.json()}   $..MULTICAST_GROUP_SUBNET   {{ vxlan.underlay.multicast.group_subnet | default(defaults.vxlan.underlay.multicast.group_subnet) }}   msg=MULTICAST_GROUP_SUBNET
+    Should Be Equal Value Json String   ${r.json()}   $..MULTICAST_GROUP_SUBNET   {{ vxlan.underlay.multicast.ipv4.group_subnet | default(defaults.vxlan.underlay.multicast.ipv4.group_subnet) }}   msg=MULTICAST_GROUP_SUBNET
     Should Be Equal Value Json String   ${r.json()}   $..RP_COUNT   {{ vxlan.underlay.multicast.rendezvous_points | default(defaults.vxlan.underlay.multicast.rendezvous_points) }}   msg=RP_COUNT
     Should Be Equal Value Json String   ${r.json()}   $..RP_MODE   {{ vxlan.underlay.multicast.rp_mode | default(defaults.vxlan.underlay.multicast.rp_mode) }}   msg=RP_MODE
     Should Be Equal Value Json String   ${r.json()}   $..RP_LB_ID   {{ vxlan.underlay.multicast.underlay_rp_loopback_id | default(defaults.vxlan.underlay.multicast.underlay_rp_loopback_id) }}   msg=RP_LB_ID
-    Should Be Equal Value Json String   ${r.json()}   $..ENABLE_TRM   {{ (vxlan.underlay.multicast.trm_enable | default(defaults.vxlan.underlay.multicast.trm_enable) | lower) }}   msg=ENABLE_TRM
-{% if (vxlan.underlay.multicast.trm_enable | default(defaults.vxlan.underlay.multicast.trm_enable) | lower) == 'true' %}
-    Should Be Equal Value Json String   ${r.json()}   $..L3VNI_MCAST_GROUP     {{ vxlan.underlay.multicast.trm_default_group | default(defaults.vxlan.underlay.multicast.trm_default_group) }}
+    Should Be Equal Value Json String   ${r.json()}   $..ENABLE_TRM   {{ (vxlan.underlay.multicast.ipv4.trm_enable | default(defaults.vxlan.underlay.multicast.ipv4.trm_enable) | lower) }}   msg=ENABLE_TRM
+{% if (vxlan.underlay.multicast.ipv4.trm_enable | default(defaults.vxlan.underlay.multicast.ipv4.trm_enable) | lower) == 'true' %}
+    Should Be Equal Value Json String   ${r.json()}   $..L3VNI_MCAST_GROUP     {{ vxlan.underlay.multicast.ipv4.trm_default_group | default(defaults.vxlan.underlay.multicast.ipv4.trm_default_group) }}
 {% endif %}
 {% if vxlan.underlay.multicast.rp_mode | default(defaults.vxlan.underlay.multicast.rp_mode) == 'bidir' %}
     Should Be Equal Value Json String   ${r.json()}   $..PHANTOM_RP_LB_ID1   {{ vxlan.underlay.multicast.underlay_primary_rp_loopback_id | default(defaults.vxlan.underlay.multicast.underlay_primary_rp_loopback_id) }}   msg=PHANTOM_RP_LB_ID1
@@ -74,12 +74,12 @@ Verify Fabric {{ fabric }} Underlay BGP Parameters
     Should Be Equal Value Json String   ${r.json()}   $..BGP_AUTH_KEY     {{ vxlan.underlay.bgp.authentication_key | default(omit) }}   msg=BGP_AUTH_KEY
 {% endif %}
 
-{% if (vpc.advertise_pip | default(defaults.vxlan.global.vpc.advertise_pip) | lower) == 'false' %}
-    Should Be Equal Value Json String   ${r.json()}   $..ADVERTISE_PIP_ON_BORDER   {{ vxlan.global.vpc.advertise_pip_border_only | default(defaults.vxlan.global.vpc.advertise_pip_border_only) | lower}}   msg=ADVERTISE_PIP_ON_BORDER
+{% if (vpc.advertise_pip | default(defaults.vxlan.global.ibgp.vpc.advertise_pip) | lower) == 'false' %}
+    Should Be Equal Value Json String   ${r.json()}   $..ADVERTISE_PIP_ON_BORDER   {{ vxlan.global.ibgp.vpc.advertise_pip_border_only | default(defaults.vxlan.global.ibgp.vpc.advertise_pip_border_only) | lower}}   msg=ADVERTISE_PIP_ON_BORDER
 {% endif %}
-    Should Be Equal Value Json String   ${r.json()}   $..VPC_DOMAIN_ID_RANGE   {{ vxlan.global.vpc.domain_id_range | default(defaults.vxlan.global.vpc.domain_id_range) }}     msg=VPC_DOMAIN_ID_RANGE
-    Should Be Equal Value Json String   ${r.json()}   $..FABRIC_VPC_QOS   {{ (vxlan.global.vpc.fabric_vpc_qos | default(defaults.vxlan.global.vpc.fabric_vpc_qos) | lower) }}     msg=FABRIC_VPC_QOS
-{% if (vxlan.global.vpc.fabric_vpc_qos | default(defaults.vxlan.global.vpc.fabric_vpc_qos)) %}
-    Should Be Equal Value Json String   ${r.json()}   $..FABRIC_VPC_QOS_POLICY_NAME   {{ vxlan.global.vpc.fabric_vpc_qos_policy_name | default(defaults.vxlan.global.vpc.fabric_vpc_qos_policy_name) }}     msg=FABRIC_VPC_QOS_POLICY_NAME
+    Should Be Equal Value Json String   ${r.json()}   $..VPC_DOMAIN_ID_RANGE   {{ vxlan.global.ibgp.vpc.domain_id_range | default(defaults.vxlan.global.ibgp.vpc.domain_id_range) }}     msg=VPC_DOMAIN_ID_RANGE
+    Should Be Equal Value Json String   ${r.json()}   $..FABRIC_VPC_QOS   {{ (vxlan.global.ibgp.vpc.fabric_vpc_qos | default(defaults.vxlan.global.ibgp.vpc.fabric_vpc_qos) | lower) }}     msg=FABRIC_VPC_QOS
+{% if (vxlan.global.ibgp.vpc.fabric_vpc_qos | default(defaults.vxlan.global.ibgp.vpc.fabric_vpc_qos)) %}
+    Should Be Equal Value Json String   ${r.json()}   $..FABRIC_VPC_QOS_POLICY_NAME   {{ vxlan.global.ibgp.vpc.fabric_vpc_qos_policy_name | default(defaults.vxlan.global.ibgp.vpc.fabric_vpc_qos_policy_name) }}     msg=FABRIC_VPC_QOS_POLICY_NAME
 {% endif %}
 
