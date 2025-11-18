@@ -73,8 +73,8 @@ Verify Fabric {{ fabric }} Underlay BGP Parameters
     Should Be Equal Value Json String   ${r.json()}   $..BGP_AUTH_KEY_TYPE     {{ vxlan.underlay.bgp.authentication_key_type | default(defaults.vxlan.underlay.bgp.authentication_key_type) }}   msg=BGP_AUTH_KEY_TYPE
     Should Be Equal Value Json String   ${r.json()}   $..BGP_AUTH_KEY     {{ vxlan.underlay.bgp.authentication_key | default(omit) }}   msg=BGP_AUTH_KEY
 {% endif %}
-
-{% if not (vxlan.global.ibgp.vpc.advertise_pip | default(defaults.vxlan.global.ibgp.vpc.advertise_pip) | bool) %}
+{% if not (vxlan.global.ibgp.vpc.advertise_pip
+           | default(defaults.vxlan.global.ibgp.vpc.advertise_pip)) %}
     Should Be Equal Value Json String   ${r.json()}   $..ADVERTISE_PIP_ON_BORDER   {{ vxlan.global.ibgp.vpc.advertise_pip_border_only | default(defaults.vxlan.global.ibgp.vpc.advertise_pip_border_only) | lower}}   msg=ADVERTISE_PIP_ON_BORDER
 {% endif %}
     Should Be Equal Value Json String   ${r.json()}   $..VPC_DOMAIN_ID_RANGE   {{ vxlan.global.ibgp.vpc.domain_id_range | default(defaults.vxlan.global.ibgp.vpc.domain_id_range) }}     msg=VPC_DOMAIN_ID_RANGE
