@@ -14,7 +14,7 @@ vxlan:
 
 fabric:
   name: str()
-  type: enum('VXLAN_EVPN', 'eBGP_VXLAN', 'External', 'ISN', 'MSD')
+  type: enum('VXLAN_EVPN', 'MSD', 'ISN', 'External', 'eBGP_VXLAN')
 
 # v0.5.1: global is now organized by fabric type
 global:
