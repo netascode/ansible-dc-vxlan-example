@@ -1,7 +1,8 @@
 ---
 # This is the main entry point playbook for calling the various
 # roles in this collection.
-- hosts: nac-fabric1
+- name: Manage VXLAN Fabric Configuration
+  hosts: nac-fabric1
   any_errors_fatal: true
   gather_facts: false
 
