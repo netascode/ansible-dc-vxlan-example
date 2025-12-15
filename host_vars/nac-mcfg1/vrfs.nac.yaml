@@ -1,0 +1,25 @@
+---
+
+vxlan:
+  multisite:
+    overlay:
+      vrfs:
+        - name: NaC-VRF01
+          vrf_id: 150001
+          vlan_id: 2001
+          vrf_vlan_name: NaC-VRF01
+          vrf_intf_desc: NaC-VRF01 Interface
+          child_fabrics:
+            - name: nac-ibgp-fabric1
+            - name: nac-ibgp-fabric2
+          vrf_attach_group: overlay1
+      vrf_attach_groups:
+        - name: overlay1
+          switches:
+            - hostname: nac-site1-l1
+            - hostname: nac-site1-l2
+            - hostname: nac-site1-l3
+            - hostname: nac-site1-bgw1
+            - hostname: nac-site1-bgw2
+            - hostname: nac-site2-l1
+            - hostname: nac-site2-bgw1

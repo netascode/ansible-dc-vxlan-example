@@ -1,0 +1,11 @@
+---
+
+vxlan:
+  multisite:
+    child_fabrics:
+      - name: nac-ibgp-fabric1
+        cluster: NaC-ND01
+      - name: nac-ibgp-fabric2
+        cluster: NaC-ND01
+      - name: nac-isn
+        cluster: NaC-ND01

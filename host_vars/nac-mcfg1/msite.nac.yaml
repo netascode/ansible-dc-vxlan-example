@@ -1,0 +1,13 @@
+---
+
+vxlan:
+  multisite:
+    anycast_gateway_mac: 1234.5678.9000
+    overlay_dci:
+      deployment_method: Centralized_To_Route_Server
+      route_server:
+        peers:
+          - ip_address: 101.101.101.101
+            bgp_asn: "65990"
+      underlay_autoconfig: true
+      enable_bgp_send_community: true

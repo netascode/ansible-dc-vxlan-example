@@ -1,0 +1,28 @@
+---
+
+vxlan:
+  multisite:
+    overlay:
+      networks:
+        - name: NaC-Net01
+          vrf_name: NaC-VRF01
+          net_id: 130001
+          vlan_id: 2301
+          vlan_name: NaC-Net01_vlan2301
+          int_desc: NaC-Net01 Interface
+          gw_ip_address: 192.168.11.1/24
+          child_fabrics:
+            - name: nac-ibgp-fabric1
+            - name: nac-ibgp-fabric2
+          network_attach_group: net01
+      network_attach_groups:
+        - name: compute
+          switches:
+            - hostname: nac-site1-l1
+            - hostname: nac-site1-l2
+            - hostname: nac-site1-l3
+            - hostname: nac-site1-l4
+            - hostname: nac-site1-bgw1
+            - hostname: nac-site1-bgw2
+            - hostname: nac-site2-l1
+            - hostname: nac-site2-bgw1
