@@ -1,35 +1,35 @@
----
-vxlan:
-  overlay:
-    vrfs:
-      - name: NaC-VRF01
-        vrf_id: 150001
-        vlan_id: 2001
-        vrf_attach_group: all
-      - name: NaC-VRF02
-        vrf_id: 150002
-        vlan_id: 2002
-        vrf_attach_group: leaf1
-      - name: NaC-VRF03
-        vrf_id: 150003
-        vlan_id: 2003
-        vrf_attach_group: leaf2
-    vrf_attach_groups:
-      - name: all
-        switches:
-          - hostname: netascode-leaf1
-          - hostname: netascode-leaf2
-          - hostname: netascode-leaf3
-          - hostname: netascode-leaf4
-      - name: leaf1
-        switches:
-          - hostname: netascode-leaf1
-      - name: leaf2
-        switches:
-          - hostname: netascode-leaf2
-      - name: leaf3
-        switches:
-          - hostname: netascode-leaf3
-      - name: leaf4
-        switches:
-          - hostname: netascode-leaf4
+# ---
+# vxlan:
+#   overlay:
+#     vrfs:
+#       - name: NaC-VRF01
+#         vrf_id: 150001
+#         vlan_id: 2001
+#         vrf_attach_group: all
+#       - name: NaC-VRF02
+#         vrf_id: 150002
+#         vlan_id: 2002
+#         vrf_attach_group: leaf1
+#       - name: NaC-VRF03
+#         vrf_id: 150003
+#         vlan_id: 2003
+#         vrf_attach_group: leaf2
+#     vrf_attach_groups:
+#       - name: all
+#         switches:
+#           - hostname: netascode-leaf1
+#           - hostname: netascode-leaf2
+#           - hostname: netascode-leaf3
+#           - hostname: netascode-leaf4
+#       - name: leaf1
+#         switches:
+#           - hostname: netascode-leaf1
+#       - name: leaf2
+#         switches:
+#           - hostname: netascode-leaf2
+#       - name: leaf3
+#         switches:
+#           - hostname: netascode-leaf3
+#       - name: leaf4
+#         switches:
+#           - hostname: netascode-leaf4
