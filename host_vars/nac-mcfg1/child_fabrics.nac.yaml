@@ -3,9 +3,9 @@
 vxlan:
   multisite:
     child_fabrics:
-      - name: nac-ibgp-fabric1
+      - name: nac-fabric1
         cluster: NaC-ND01
-      - name: nac-ibgp-fabric2
+      - name: nac-fabric2
         cluster: NaC-ND02
       - name: nac-isn
         cluster: NaC-ND01
