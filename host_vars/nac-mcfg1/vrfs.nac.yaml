@@ -10,8 +10,8 @@ vxlan:
           vrf_vlan_name: NaC-VRF01
           vrf_intf_desc: NaC-VRF01 Interface
           child_fabrics:
-            - name: nac-ibgp-fabric1
-            - name: nac-ibgp-fabric2
+            - name: nac-fabric1
+            - name: nac-fabric2
           vrf_attach_group: overlay1
       vrf_attach_groups:
         - name: overlay1
