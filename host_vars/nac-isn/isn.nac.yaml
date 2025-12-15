@@ -1,0 +1,8 @@
+---
+
+vxlan:
+  multisite:
+    isn:
+      bgp_asn: "65990"
+      auth_proto: MD5
+      sub_int_range: 500-511

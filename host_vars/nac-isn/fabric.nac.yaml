@@ -1,0 +1,6 @@
+---
+
+vxlan:
+  fabric:
+    name: nac-isn
+    type: ISN

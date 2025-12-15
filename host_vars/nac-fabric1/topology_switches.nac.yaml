@@ -2,39 +2,51 @@
 vxlan:
   topology:
     switches:
-      - name: netascode-spine1
+      - name: nac-site1-spine1
         serial_number: 99H2TUPCVFK
         role: spine
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.21
-      - name: netascode-spine2
+      - name: nac-site1-spine2
         serial_number: 941L30Q8ZYI
         role: spine
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.22
-      - name: netascode-leaf1
+      - name: nac-site1-leaf1
         serial_number: 9LWGEUPJOCM
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.11
-      - name: netascode-leaf2
+      - name: nac-site1-leaf2
         serial_number: 9YEXD0OHA7Z
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.12
-      - name: netascode-leaf3
+      - name: nac-site1-leaf3
         serial_number: 9M2TXMZ7D3N
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.13
-      - name: netascode-leaf4
+      - name: nac-site1-leaf4
         serial_number: 982YGMKUY2B
         role: leaf
         management:
           default_gateway_v4: 10.1.1.1
           management_ipv4_address: 10.1.1.14
+      - name: nac-site1-bgw1
+        serial_number: 9EJCBOGK1GI
+        role: border_gateway
+        management:
+          default_gateway_v4: 10.1.1.1
+          management_ipv4_address: 10.1.1.15
+      - name: nac-site1-bgw2
+        serial_number: 9LGHUYAKS4I
+        role: border_gateway
+        management:
+          default_gateway_v4: 10.1.1.1
+          management_ipv4_address: 10.1.1.16

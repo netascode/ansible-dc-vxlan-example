@@ -1,0 +1,11 @@
+---
+
+vxlan:
+  topology:
+    switches:
+      - name: nac-isn
+        serial_number: 9CCNGHKAJY1
+        role: core_router
+        management:
+          default_gateway_v4: 10.1.1.1
+          management_ipv4_address: 10.1.1.30

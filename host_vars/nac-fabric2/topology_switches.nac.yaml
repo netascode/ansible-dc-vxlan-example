@@ -1,0 +1,22 @@
+---
+vxlan:
+  topology:
+    switches:
+      - name: nac-site2-spine1
+        serial_number: 99H2TUPCVFK
+        role: spine
+        management:
+          default_gateway_v4: 10.2.2.2
+          management_ipv4_address: 10.2.2.21
+      - name: nac-site2-leaf1
+        serial_number: 9LWGEUPJOCM
+        role: leaf
+        management:
+          default_gateway_v4: 10.2.2.2
+          management_ipv4_address: 10.2.2.11
+      - name: nac-site2-bgw1
+        serial_number: 9EJCBOGK1GI
+        role: border_gateway
+        management:
+          default_gateway_v4: 10.2.2.2
+          management_ipv4_address: 10.2.2.12

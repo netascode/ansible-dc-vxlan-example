@@ -1,0 +1,12 @@
+---
+
+vxlan:
+  topology:
+    switches:
+      - name: nac-isn
+        interfaces:
+          - name: Loopback101
+            mode: loopback
+            description: RS Loopback
+            enabled: true
+            ipv4_address: 101.101.101.101

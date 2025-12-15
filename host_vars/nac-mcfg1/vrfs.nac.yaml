@@ -16,10 +16,10 @@ vxlan:
       vrf_attach_groups:
         - name: overlay1
           switches:
-            - hostname: nac-site1-l1
-            - hostname: nac-site1-l2
-            - hostname: nac-site1-l3
+            - hostname: nac-site1-leaf1
+            - hostname: nac-site1-leaf2
+            - hostname: nac-site1-leaf3
             - hostname: nac-site1-bgw1
             - hostname: nac-site1-bgw2
-            - hostname: nac-site2-l1
+            - hostname: nac-site2-leaf1
             - hostname: nac-site2-bgw1
