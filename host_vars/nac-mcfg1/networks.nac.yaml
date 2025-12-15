@@ -12,8 +12,8 @@ vxlan:
           int_desc: NaC-Net01 Interface
           gw_ip_address: 192.168.11.1/24
           child_fabrics:
-            - name: nac-ibgp-fabric1
-            - name: nac-ibgp-fabric2
+            - name: nac-fabric1
+            - name: nac-fabric2
           network_attach_group: net01
       network_attach_groups:
         - name: compute
