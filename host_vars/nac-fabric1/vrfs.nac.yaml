@@ -1,3 +1,4 @@
+# VRFs are managed by MCFG fabric type
 # ---
 # vxlan:
 #   overlay:
