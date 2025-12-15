@@ -6,3 +6,6 @@ all:
       hosts:
         nac-fabric1:
           ansible_host: "{{ lookup('ansible.builtin.env', 'ND_HOST') }}"
+        nac-mcfg1:
+          ansible_host: "{{ lookup('ansible.builtin.env', 'ND_HOST') }}"
+          ansible_httpapi_login_domain: "{{ lookup('env', 'ND_DOMAIN') }}"  # ND Remote Auth Domain
