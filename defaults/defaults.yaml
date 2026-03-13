@@ -1,7 +1,6 @@
 ---
 # Trimmed defaults file for use with the fabric robot test.
 # Only keys referenced in tests/templates/config/fabric/fabric.robot are included.
-# Values are sourced from nac-vxlan/defaults/defaults.yaml.
 
 defaults:
   vxlan:
