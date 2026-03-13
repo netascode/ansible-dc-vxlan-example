@@ -1,0 +1,45 @@
+---
+# Trimmed defaults file for use with the fabric robot test.
+# Only keys referenced in tests/templates/config/fabric/fabric.robot are included.
+
+defaults:
+  vxlan:
+    global:
+      ibgp:
+        vpc:
+          advertise_pip: false
+          advertise_pip_border_only: true
+          domain_id_range: 1-1000
+          fabric_vpc_qos: false
+          fabric_vpc_qos_policy_name: spine_qos_for_fabric_vpc_peering
+    underlay:
+      general:
+        replication_mode: multicast
+        enable_ipv6_underlay: false
+        manual_underlay_allocation: false
+        underlay_routing_loopback_id: 0
+        underlay_vtep_loopback_id: 1
+        intra_fabric_interface_mtu: 9216
+      ipv4:
+        underlay_routing_loopback_ip_range: 10.2.0.0/22
+        underlay_vtep_loopback_ip_range: 10.3.0.0/22
+        underlay_rp_loopback_ip_range: 10.254.254.0/24
+        underlay_subnet_ip_range: 10.4.0.0/16
+      ipv6:
+        enable_ipv6_link_local_address: true
+        underlay_subnet_mask: 126
+      bgp:
+        authentication_enable: false
+        authentication_key_type: 3
+      multicast:
+        rendezvous_points: 2
+        rp_mode: asm
+        underlay_rp_loopback_id: 254
+        underlay_primary_rp_loopback_id: 2
+        underlay_backup_rp_loopback_id: 3
+        underlay_second_backup_rp_loopback_id: 4
+        underlay_third_backup_rp_loopback_id: 5
+        ipv4:
+          group_subnet: 239.1.1.0/25
+          trm_enable: false
+          trm_default_group: 239.1.1.0
