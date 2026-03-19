@@ -1,8 +1,9 @@
 ansible-core>=2.14.0,<2.19.0
 ansible-lint
 jmespath
-nac-yaml==1.0.0
-nac-validate==1.0.0
+nac-yaml>=1.1.1
+nac-validate==1.2.0
+nac-test==1.2.0
 macaddress
 netaddr
 packaging
