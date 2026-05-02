@@ -156,7 +156,7 @@ ansible_connection: ansible.netcommon.httpapi
 ansible_httpapi_port: 443
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
-ansible_network_os: cisco.dcnm.dcnm
+ansible_network_os: "{{ lookup('env', 'ND_DOMAIN') }}"
 # NDFC API Credentials
 ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
 ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
@@ -183,6 +183,9 @@ export ND_PASSWORD=Admin_123
 # These are the credentials for the devices in the inventory
 export NDFC_SW_USERNAME=admin
 export NDFC_SW_PASSWORD=Admin_123
+export ND_DOMAIN=cisco.dcnm.dcnm
+# If no domain use local
+# export ND_DOMAIN=local
 ```
 
 ## Understanding our Ansible roles
