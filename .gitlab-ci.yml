@@ -53,12 +53,12 @@ test-integration:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
-    - set -o pipefail && nac-test -d ./host_vars/nac-fabric1 -d ./group_vars/ndfc/defaults.yaml -t ./tests/templates -o ./tests/results/ndfc |& tee test_output.txt
+    - set -o pipefail && nac-test -d ./host_vars/nac-fabric1 -d ./defaults/defaults.yaml -t ./tests/templates -o ./tests/results/nd |& tee test_output.txt
   artifacts:
     when: always
     paths:
-      - tests/results/ndfc/*.html
-      - tests/results/ndfc/xunit.xml
+      - tests/results/nd/*.html
+      - tests/results/nd/xunit.xml
       - test_output.txt
     reports:
-      junit: tests/results/ndfc/xunit.xml
+      junit: tests/results/nd/xunit.xml
