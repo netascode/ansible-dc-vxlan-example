@@ -224,6 +224,7 @@ link_fabric_delete_mode: false
 link_vpc_delete_mode: false
 network_delete_mode: false
 policy_delete_mode: false
+tor_pairing_delete_mode: false
 vpc_delete_mode: false
 vrf_delete_mode: false
 
