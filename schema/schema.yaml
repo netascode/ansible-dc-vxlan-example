@@ -94,7 +94,6 @@ underlay_general:
   underlay_routing_loopback_id: int(required=False)
   underlay_vtep_loopback_id: int(required=False)
   underlay_routing_protocol_tag: str(required=False)
-  underlay_rp_loopback_id: int(required=False)
   intra_fabric_interface_mtu: int(required=False)
   layer2_host_interface_mtu: int(required=False)
   unshut_host_interfaces: bool(required=False)
