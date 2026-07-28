@@ -38,7 +38,7 @@ global_ibgp:
   ntp_servers: list(include('common_ntp_server'), required=False)
   syslog_servers: list(include('common_syslog_server'), required=False)
   overlay_mode: enum('cli', 'config-profile', required=False)
-  greenfield_cleanup: enum('Enable', 'Disable')
+  greenfield_cleanup: enum('Enable', 'Disable', required=False)
 
 # eBGP EVPN fabric (eBGP_VXLAN)
 global_ebgp:
