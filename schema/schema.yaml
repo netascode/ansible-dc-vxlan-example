@@ -113,18 +113,10 @@ underlay_general:
 underlay_ipv4:
   fabric_interface_numbering: enum('p2p', 'unnumbered', required=False)
   subnet_mask: int(min=30, max=31, required=False)
-  underlay_routing_loopback_ip_range: ip(version=4, required=False) # need validator for subnet_with_prefix
-  underlay_vtep_loopback_ip_range: ip(version=4, required=False) # need validator for subnet_with_prefix
-  underlay_rp_loopback_ip_range: ip(version=4, required=False) # need validator for subnet_with_prefix
-  underlay_subnet_ip_range: ip(version=4, required=False) # need validator for subnet_with_prefix
 
 underlay_ipv6:
   enable_ipv6_link_local_address: bool(required=False)
   underlay_subnet_mask: enum(126, 127, required=False)
-  underlay_routing_loopback_ip_range: ip(version=6, required=False) # need validator for subnet_with_prefix
-  underlay_vtep_loopback_ip_range: ip(version=6, required=False) # need validator for subnet_with_prefix
-  underlay_rp_loopback_ip_range: ip(version=6, required=False) # need validator for subnet_with_prefix
-  underlay_subnet_ip_range: ip(version=6, required=False) # need validator for subnet_with_prefix
 
 underlay_ospf:
   area_id: str(required=False)
