@@ -113,6 +113,10 @@ underlay_general:
 underlay_ipv4:
   fabric_interface_numbering: enum('p2p', 'unnumbered', required=False)
   subnet_mask: int(min=30, max=31, required=False)
+  underlay_routing_loopback_ip_range: ip(version=4, required=False)
+  underlay_vtep_loopback_ip_range: ip(version=4, required=False)
+  underlay_rp_loopback_ip_range: ip(version=4, required=False)
+  underlay_subnet_ip_range: ip(version=4, required=False)
 
 underlay_ipv6:
   enable_ipv6_link_local_address: bool(required=False)
@@ -129,11 +133,6 @@ underlay_multicast:
   rp_mode: enum('asm', 'bidir', required=False)
   underlay_rp_loopback_id: int(min=0, max=1023, required=False)
   underlay_primary_rp_loopback_id: int(min=0, max=1023, required=False)
-  underlay_backup_rp_loopback_id: int(min=0, max=1023, required=False)
-  underlay_second_backup_rp_loopback_id: int(min=0, max=1023, required=False)
-  underlay_third_backup_rp_loopback_id: int(min=0, max=1023, required=False)
-  enable_mvpn_vri_id_range: bool(required=False)
-  mvpn_vri_id_range: include('underlay_multicast_mvpn_vri_id_range', required=False)
 
 # Overlay section
 overlay:
