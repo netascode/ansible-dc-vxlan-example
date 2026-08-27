@@ -1,6 +1,6 @@
-# Ansible NDFC VXLAN Example Repository
+# Ansible ND VXLAN Example Repository
 
-This repository is designed to build the skeleton for the [Network as Code DC VXLAN Ansible Galaxy Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nac_dc_vxlan/). Cloning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard Fabric Controller (NDFC).
+This repository is designed to build the skeleton for the [Network as Code DC VXLAN Ansible Galaxy Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nac_dc_vxlan/). Cloning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard (ND).
 
 ## Setting up environment for the collection
 
@@ -135,13 +135,13 @@ graph
   nac-fabric1-->data_model_files
 ```
 
-The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yaml` file which stores the credential information for the NDFC controller.
+The data model **must** exist under the `host_vars` directory structure. The inventory file organizes how the variables are read using both `group_vars` and `host_vars` directories. Under `group_vars` is where you populate the `connection.yaml` file which stores the credential information for the ND controller.
 
-The collection is **pre-built** to make use of the `group_vars` and `host_vars` data and matches what is already constructed in the repository. There is a 1:1 relationship between the code in the repository and the NDFC fabric. For more complex environments, the inventory file can be expanded to include multiple groups and hosts including managment of multi-site fabrics which is explained in a separate document.
+The collection is **pre-built** to make use of the `group_vars` and `host_vars` data and matches what is already constructed in the repository. There is a 1:1 relationship between the code in the repository and the ND fabric. For more complex environments, the inventory file can be expanded to include multiple groups and hosts including managment of multi-site fabrics which is explained in a separate document.
 
 ### Step 1 - Update the inventory file
 
-In the provided `inventory.yaml` file in the root directory, update the `ansible_host` variable to point to your NDFC controller by replacing `10.X.X.X` with the IP address of the NDFC controller.
+In the provided `inventory.yaml` file in the root directory, update the `ansible_host` variable to point to your ND controller by replacing `10.X.X.X` with the IP address of the ND controller.
 
 ### Step 2 - Configure ansible connection file
 
@@ -157,7 +157,7 @@ ansible_httpapi_port: 443
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_network_os: cisco.dcnm.dcnm
-# NDFC API Credentials
+# ND API Credentials
 ansible_user: "{{ lookup('env', 'ND_USERNAME') }}"
 ansible_password: "{{ lookup('env', 'ND_PASSWORD') }}"
 # Credentials for switches in inventory
@@ -166,7 +166,7 @@ ndfc_switch_password: "{{ lookup('env', 'NDFC_SW_PASSWORD') }}"
 
 ```
 
-This file contains the connection parameters required for reachability to the NDFC controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the NDFC controller. For the devices, you will set the `ndfc_switch_username` and `ndfc_switch_username` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
+This file contains the connection parameters required for reachability to the ND controller. The `ansible_user`, and `ansible_password` credentials must be set to establish a connection to the ND controller. For the devices, you will set the `ndfc_switch_username` and `ndfc_switch_username` variables which can also be configured as environment variables. Environment variables provide extra security so that the credentials are not stored in plain text inside the repository. Accidentaly including your credentials in a repository is a very difficult to remove. Hence, the usage of environment variables is recommended as a starting point.
 
 Additionally, if a pipeline is required, the environment variables can be stored in the pipeline configuration using secure methods and prevents them from being exposed in the repository.
 
@@ -174,7 +174,7 @@ Additionally, if a pipeline is required, the environment variables can be stored
 
 ### Step 3 - Set environment variables
 
-The environment variables should be set in the shell where the playbook is executed. They are configured via the `export` command in the shell (bash). Using this template set the environment variables to the correct credentials for the NDFC controller and the fabric devices that will be managed by NDFC.
+The environment variables should be set in the shell where the playbook is executed. They are configured via the `export` command in the shell (bash). Using this template set the environment variables to the correct credentials for the ND controller and the fabric devices that will be managed by ND.
 
 ```bash
 # These are the credentials for ND
@@ -199,19 +199,19 @@ As part of the VXLAN as Code service from Cisco, you will also be able to utiliz
 
 Role: [cisco.nac_dc_vxlan.dtc.create](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/dtc/create/README.md)
 
-The `create` role builds all of the templates and variable parameters required to deploy the VXLAN fabric and creates fabric state in NDFC. The data model is converted into the proper templates required by the Ansible modules used to communicate with the NDFC controller and manage the fabric state.
+The `create` role builds all of the templates and variable parameters required to deploy the VXLAN fabric and creates fabric state in ND. The data model is converted into the proper templates required by the Ansible modules used to communicate with the ND controller and manage the fabric state.
 
 ### Deploy role
 
 Role: [cisco.nac_dc_vxlan.dtc.deploy](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/dtc/deploy/README.md)
 
-The `deploy` role deploys the fabric state created using the Create role to the NDFC managed devices.
+The `deploy` role deploys the fabric state created using the Create role to the ND managed devices.
 
 ### Remove role
 
 Role: [cisco.nac_dc_vxlan.dtc.remove](https://github.com/netascode/ansible-dc-vxlan/blob/develop/roles/dtc/remove/README.md)
 
-The `remove` role removes state from the NDFC controller and the devices managed by the NDFC controller. When the collection discoveres managed state in NDFC that is not defined the the data model it gets removed by this role.  For this reason this role requires the following variables to be set to `true` under the `group_vars` directory. This avoids accidental removal of configuration from NDFC that might impact the network.
+The `remove` role removes state from the ND controller and the devices managed by the ND controller. When the collection discoveres managed state in ND that is not defined the the data model it gets removed by this role.  For this reason this role requires the following variables to be set to `true` under the `group_vars` directory. This avoids accidental removal of configuration from ND that might impact the network.
 
 Inside the example repository under `group_vars/ndfc` is a file called `ndfc.yaml` that contains the variables:
 
@@ -234,7 +234,7 @@ multisite_network_delete_mode: false
 multisite_vrf_delete_mode: false
 ```
 
-**Note:** These variables are set to `false` by default to avoid accidental removal of configuration from NDFC that might impact the network. 
+**Note:** These variables are set to `false` by default to avoid accidental removal of configuration from ND that might impact the network. 
 
 ### Advantages of the roles in the workflow
 
@@ -242,7 +242,7 @@ These roles when run in sequence (validate, create, deploy, remove) are designed
 
 ## Building the primary playbook
 
-The following playbook for the NDFC as Code collection is the central execution point for this collection. Compared to automation in other collections, this playbook is designed to be mostly static and typically will not change. What gets executed during automation is based entirely on changes in the data model. When changes are made in the data model, the playbook will call the various roles and underlying modules to process the changes and update the NDFC managed fabric.
+The following playbook for the VXLAN as Code collection is the central execution point for this collection. Compared to automation in other collections, this playbook is designed to be mostly static and typically will not change. What gets executed during automation is based entirely on changes in the data model. When changes are made in the data model, the playbook will call the various roles and underlying modules to process the changes and update the ND managed fabric.
 
 The playbook is located in the root of the repository and is called `vxlan.yaml`. It contains the following:
 
@@ -261,7 +261,7 @@ The playbook is located in the root of the repository and is called `vxlan.yaml`
 
     # -----------------------
     # DataCenter Roles
-    #   Role: cisco.netascode_dc_vxlan.dtc manages direct to controller NDFC workflows
+    #   Role: cisco.netascode_dc_vxlan.dtc manages direct to controller ND workflows
     #
     - role: cisco.nac_dc_vxlan.dtc.create
       tags: 'role_create'
@@ -277,10 +277,10 @@ The `host` is defined as nac-fabric1 which references back to the `inventory.yam
 
 The first role is `cisco.nac_dc_vxlan.validate` which is going to validate the data model. This is a required step to ensure that the data model is correct and that the data model is going to be able to be processed by the subsequent roles.
 
-The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxlan.dtc.deploy`, and `cisco.nac_dc_vxlan.dtc.remove` roles. These roles are the primary roles that will invoke changes in NDFC as described earlier.
+The subsequent roles are the `cisco.nac_dc_vxlan.dtc.create`, `cisco.nac_dc_vxlan.dtc.deploy`, and `cisco.nac_dc_vxlan.dtc.remove` roles. These roles are the primary roles that will invoke changes in ND as described earlier.
 
 
-> **Note**: For your safety as indicated ealier, the `remove` role also requires setting some variables to `true` under the `group_vars` directory. This is to avoid accidental removal of configuration from NDFC that might impact the network. This will be covered in more detail below.
+> **Note**: For your safety as indicated ealier, the `remove` role also requires setting some variables to `true` under the `group_vars` directory. This is to avoid accidental removal of configuration from ND that might impact the network. This will be covered in more detail below.
 
 The playbook can be configured to execute only the roles that are required. For example, as you are building your data model and familiarizing yourself with the collection, you may comment out the `deploy` and `remove` roles and only execute the `validate` and `create` roles. This provides a quick way to make sure that the data model is structured correctly.
 
