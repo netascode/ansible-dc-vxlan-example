@@ -1,6 +1,6 @@
-# Ansible ND VXLAN Example Repository
+# Network as Code for VXLAN Example Repository
 
-This repository is designed to build the skeleton for the [Network as Code DC VXLAN Ansible Galaxy Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nac_dc_vxlan/). Cloning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard (ND).
+This repository is designed to build the skeleton for the [Network as Code for VXLAN Ansible Galaxy Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nac_dc_vxlan/). Cloning this repository will create a working structure that can be extended to automate your Cisco Nexus Data Center network using Nexus Dashboard (ND).
 
 ## Setting up environment for the collection
 
@@ -193,7 +193,7 @@ Role: [cisco.nac_dc_vxlan.validate](https://github.com/netascode/ansible-dc-vxla
 
 The `validate` role ensures that the data model is correct and that the data model can be processed by the subsequent roles. The validate role reads all the files in the `host_vars` directory and create a single data model in memory for execution.
 
-As part of the VXLAN as Code service from Cisco, you will also be able to utilize the semantic validation feature to make sure that the data model matches the intended expected values. This is a powerful feature that allows you to ensure that the data model is correct before it is deployed to the network. Additonally the validate role allows creation of rules that can be used to prevent operators from making specific configurations that are not allowed in the network. These can be as simple as enforcing proper naming conventions to more complex rules for interconnectivity issues that should be avoided. These rules are coded in Python and can be constructed as part of the Services as Code offer. 
+As part of Network as Code for VXLAN from Cisco, you will also be able to utilize the semantic validation feature to make sure that the data model matches the intended expected values. This is a powerful feature that allows you to ensure that the data model is correct before it is deployed to the network. Additionally, the validate role allows creation of rules that can be used to prevent operators from making specific configurations that are not allowed in the network. These can be as simple as enforcing proper naming conventions to more complex rules for interconnectivity issues that should be avoided. These rules are coded in Python and can be constructed as part of the Services as Code offer. 
 
 ### Create role
 
@@ -242,7 +242,7 @@ These roles when run in sequence (validate, create, deploy, remove) are designed
 
 ## Building the primary playbook
 
-The following playbook for the VXLAN as Code collection is the central execution point for this collection. Compared to automation in other collections, this playbook is designed to be mostly static and typically will not change. What gets executed during automation is based entirely on changes in the data model. When changes are made in the data model, the playbook will call the various roles and underlying modules to process the changes and update the ND managed fabric.
+The following playbook for the Network as Code for VXLAN collection is the central execution point for this collection. Compared to automation in other collections, this playbook is designed to be mostly static and typically will not change. What gets executed during automation is based entirely on changes in the data model. When changes are made in the data model, the playbook will call the various roles and underlying modules to process the changes and update the ND managed fabric.
 
 The playbook is located in the root of the repository and is called `vxlan.yaml`. It contains the following:
 
